@@ -6,16 +6,7 @@ import java.lang.reflect.*;
  * Abstract class for the Statistics of every entity or item.
  */
 public abstract class Stats {
-    protected int intelligence;
-    protected int strength;
-    protected int speed;
-    protected int dex;
-    protected int stealth;
-    protected int bonusIntelligence;
-    protected int bonusStrength;
-    protected int bonusSpeed;
-    protected int bonusDex;
-    protected int bonusStealth;
+    int[][] statValues = new int[2][5];
 
     // EFFECTS: returns an array of Field objects from reflection corresponding to the Stats fields.
     //          Used for iterating over the fields to reduce written code.
@@ -58,7 +49,7 @@ public abstract class Stats {
 
     // EFFECTS: returns the intelligence field value
     public int intelligence() {
-        return intelligence;
+        return statValues[0][1];
     }
 
     // EFFECTS: returns the strength field value
