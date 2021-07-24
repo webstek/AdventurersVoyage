@@ -24,6 +24,20 @@ public class ItemMatrix {
         maxLength = rows * columns;
     }
 
+    // REQUIRES: item parameter object to be in the list
+    // EFFECTS: returns an integer array {i, j} of the first instance of parameter item in the ItemMatrix
+    //          if the requires invalidated and the item is not in the list, returns {-1, -1}.
+    public int[] itemIndex(Item item) {
+        for (int i = 0; i < maxRows; i++) {
+            for (int j = 0; j < maxColumns; j++) {
+                if (matrixData[i][j].equals(item)) {
+                    return new int[]{i,j};
+                }
+            }
+        }
+        return new int[]{-1, -1};
+    }
+
     // MODIFIES: this
     // EFFECTS: inserts the parameter object E in the first available spot looking from top left across to top right and
     //          and then down in rows and returns true. If no spot is available, returns false.
