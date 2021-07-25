@@ -2,9 +2,11 @@ package model.abilities;
 
 import model.IntegerMatrix;
 
+// TODO determine if Ability class must be modified to work with BattleEffects / how is damage computed.
+
 /**
  * Abstract Ability class for all the abilities that can be used / passively active in combat. The Ability class has a
- * name, description, and statsEffect which
+ * name, description, and statsEffect which gives mana cost and any other stat effects of the ability.
  */
 
 public abstract class Ability {
@@ -33,6 +35,7 @@ public abstract class Ability {
         return statsEffect;
     }
 
+    // TODO update fstCost with combatAction i think
     // EFFECT: returns the fstCost to use the ability in combat
     public int fstCost() {
         return fstCost;
