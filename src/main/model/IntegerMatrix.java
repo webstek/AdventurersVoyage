@@ -9,9 +9,9 @@ package model;
 
 public class IntegerMatrix {
     private final int[][] matrixData;
-    private static int maxRows;
-    private static int maxColumns;
-    private static int maxLength;
+    private int maxRows;
+    private int maxColumns;
+    private int maxLength;
 
     // EFFECTS: creates a 2 by 7 IntegerMatrix with all zero entries
     public IntegerMatrix() {
@@ -31,6 +31,9 @@ public class IntegerMatrix {
 
     // EFFECTS: sets the correct field data for a 2d array
     public IntegerMatrix(int[][] initMatrix) {
+//        maxRows = 0;
+//        maxColumns = 0;
+//        maxLength = 0;
         matrixData = initMatrix;
         for (int[] row : initMatrix) {
             maxRows++;
@@ -47,7 +50,7 @@ public class IntegerMatrix {
     public void add(IntegerMatrix modifyerStats) {
         for (int i = 0; i < maxRows; i++) {
             for (int j = 0; j < maxColumns; j++) {
-                matrixData[i][j] += modifyerStats.matrixData[i][j];
+                this.matrixData[i][j] += modifyerStats.matrixData[i][j];
             }
         }
     }
@@ -74,6 +77,11 @@ public class IntegerMatrix {
         matrixData[i][j] -= val;
     }
 
+    // EFFECTS: returns the element of matrixData at the appropriate indices
+    public int in(int i, int j) {
+        return matrixData[i][j];
+    }
+
     // EFFECTS: removes all elements from the Inventory and sets length to zero.
     public void clear() {
         for (int i = 0; i < maxRows; i++) {
@@ -81,5 +89,15 @@ public class IntegerMatrix {
                 matrixData[i][j] = 0;
             }
         }
+    }
+
+    // EFFECTS: returns the maxRows field
+    public int getMaxRows() {
+        return maxRows;
+    }
+
+    // EFFECTS: returns the maxColumns field
+    public int getMaxColumns() {
+        return maxColumns;
     }
 }

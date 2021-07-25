@@ -11,16 +11,16 @@ import java.util.ArrayList;
 public class Ranger extends Profession {
     // EFFECTS: Creates a ranger object with the appropriate fields
     public Ranger() {
-        setBonusStats();
         this.title = "Ranger";
-        this.abilities = new ArrayList<Ability>();
+        this.abilities = new ArrayList<>();
         abilities.add(new PowerShot());
+        this.bonusStats = setBonusStats();
     }
 
     // MODIFIES: this
     // EFFECTS: sets the correct values in the bonusStats field
-    protected void setBonusStats() {
-        this.bonusStats = new IntegerMatrix(new int[][]{{0,0,0,0,0,0,0},{0,0,2,4,2,0,0}});
+    protected IntegerMatrix setBonusStats() {
+        return new IntegerMatrix(new int[][]{{0,0,0,0,0,0,0},{0,0,2,4,2,0,0}});
     }
 
 }

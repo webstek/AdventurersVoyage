@@ -11,11 +11,11 @@ import java.util.ArrayList;
 
 public abstract class Profession {
     protected String title = null;
-    protected ArrayList<Ability> abilities = new ArrayList<Ability>();
+    protected ArrayList<Ability> abilities = new ArrayList<>();
     protected IntegerMatrix bonusStats;
 
     // EFFECT: Sets the appropriate bonusStats for each profession. Called in the constructors.
-    protected abstract void setBonusStats();
+    protected abstract IntegerMatrix setBonusStats();
 
     // EFFECT: returns the title of the profession
     public String getTitle() {
@@ -25,5 +25,10 @@ public abstract class Profession {
     // EFFECT: returns the list of abilities the profession can use
     public ArrayList<Ability> getAbilities() {
         return abilities;
+    }
+
+    // EFFECT: returns the IntegerMatrix of bonus stats from the profession
+    public IntegerMatrix stats() {
+        return bonusStats;
     }
 }

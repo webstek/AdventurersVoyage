@@ -73,18 +73,33 @@ public class ItemMatrix {
     // MODIFIES: this
     // EFFECTS: removes the element at (i,j) and shifts the inventory items accordingly
     private void remove(int i, int j) {
-        int p0 = j + 1 + (maxColumns * i);
+        int p0 = toPos(i,j);
         if (length > p0) {
             for (int p = p0; p < length; p++) {
-                int copyToI = (p - 1) / maxColumns;
-                int copyToJ = p - 1 - (copyToI * maxColumns);
-                int copyFromI = p / maxColumns;
-                int copyFromJ = p - (copyFromI * maxColumns);
-                matrixData[copyToI][copyToJ] = matrixData[copyFromI][copyFromJ];
+                int[] copyTo = toIndices(p);
+                int[] copyFrom = toIndices(p + 1);
+                matrixData[copyTo[0]][copyTo[1]] = matrixData[copyFrom[0]][copyFrom[1]];
             }
         }
         length--;
         matrixData[length / maxColumns][length - ((length / maxColumns) * maxColumns)] = null;
+    }
+
+    // REQUIRES: all elements of the ItemMatrix to be type Item
+    // EFFECTS: returns the item in ItemMatrix at pos
+    public Item inPos(int p) {
+        int[] indices = toIndices(p);
+        return (Item) matrixData[indices[0]][indices[1]];
+    }
+
+    // EFFECTS: converts the position reference to a set of matrix indices (int[2] = {i,j}) like so.
+    private int[] toIndices(int p) {
+        return new int[]{(p - 1) / maxColumns,p - 1 - (((p - 1) / maxColumns) * maxColumns)};
+    }
+
+    // EFFECTS: converts a set of indices to a single position reference
+    private int toPos(int i, int j) {
+        return (j + 1) + (maxColumns * i);
     }
 
     // EFFECTS: checks if parameter type is not Stat and returns true if length is less than maxLength, false otherwise.

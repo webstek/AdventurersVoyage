@@ -5,7 +5,7 @@ import model.IntegerMatrix;
 public class PowerShot extends Ability {
     public PowerShot() {
         this.name = "Power Shot";
-        this.description = "Shoot an arrow and deal damage equal to (weapon dmg + dex + level/2 + d-20 roll";
+        this.description = "Shoot an arrow and deal damage equal to (weapon dmg + dex + level/2 + d-20 roll)";
         this.fstCost = 3;
         setStatsEffect();
     }
