@@ -1,7 +1,6 @@
 package model.races;
 
 import model.IntegerMatrix;
-
 import java.util.ArrayList;
 
 /**
@@ -15,17 +14,16 @@ public abstract class Race {
     protected String description = null;
     protected ArrayList<String> strengths = new ArrayList<String>();
     protected ArrayList<String> weaknesses = new ArrayList<String>();
-    protected int[][] statsValues;
-    protected IntegerMatrix baseStats = new IntegerMatrix();
-    protected IntegerMatrix lvlUpStats = new IntegerMatrix();
+    protected IntegerMatrix baseStats;
+    protected IntegerMatrix lvlUpStats;
 
     // MODIFIES: this
     // EFFECTS: sets the appropriate base stats for each race. Called in the constructors.
-    abstract void setStatsValues();
+    protected abstract void setStatsValues();
 
     // MODIFIES: this
     // EFFECTS: sets the perLvlHpMpGain for each race. Called in the constructors.
-    abstract void setLvlGainValues();
+    protected abstract void setLvlGainValues();
 
     // EFFECTS: returns the species name in a String
     public String getSpecies() {
