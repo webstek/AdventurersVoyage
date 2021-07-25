@@ -1,6 +1,6 @@
 package model.entities;
 
-import model.IntegerMatrix;
+import model.Statistics;
 import model.ItemMatrix;
 import model.items.*;
 import model.professions.*;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 
 public abstract class Entity {
-    protected IntegerMatrix stats = new IntegerMatrix();
+    protected Statistics stats = new Statistics();
     protected Race race;
     protected Profession profession;
     protected ItemMatrix inventory = new ItemMatrix(3, 6);
@@ -23,6 +23,7 @@ public abstract class Entity {
     protected String name;
     protected int combatActions = 0;
     protected int xp = 0;
+    protected int level = 0;
     protected int gold = 0;
 
     // MODIFIES: this
@@ -48,7 +49,7 @@ public abstract class Entity {
     }
 
     // EFFECTS: returns the current stats matrix of the player
-    public IntegerMatrix stats() {
+    public Statistics stats() {
         return stats;
     }
 
@@ -75,6 +76,11 @@ public abstract class Entity {
     // EFFECTS: returns the name string
     public String name() {
         return name;
+    }
+
+    // EFFECTS: returns the level of the Entity
+    public int level() {
+        return level;
     }
 
 

@@ -1,6 +1,5 @@
 package model;
 
-import model.IntegerMatrix;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,16 +9,16 @@ import static org.junit.jupiter.api.Assertions.*;
  * Test class for IntegerMatrix
  */
 
-public class IntegerMatrixTest {
-    IntegerMatrix mat1;
-    IntegerMatrix mat2;
-    IntegerMatrix mat3;
+public class StatisticsTest {
+    Statistics mat1;
+    Statistics mat2;
+    Statistics mat3;
 
     @BeforeEach
     public void setup() {
-        mat1 = new IntegerMatrix();
-        mat2 = new IntegerMatrix(new int[][]{{0,0,0,0,0,0,-30},{0,0,0,0,0,10,0}});
-        mat3 = new IntegerMatrix(new int[][]{{6,7,3,4,5,200,100},{0,0,0,0,0,0,0}});
+        mat1 = new Statistics();
+        mat2 = new Statistics(new int[][]{{0,0,0,0,0,0,-30},{0,0,0,0,0,10,0}});
+        mat3 = new Statistics(new int[][]{{6,7,3,4,5,200,100},{0,0,0,0,0,0,0}});
     }
 
     @Test

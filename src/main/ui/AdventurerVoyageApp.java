@@ -14,7 +14,7 @@ public class AdventurerVoyageApp {
                 + " untold as I haven't written them, and the monsters are unknown since I haven't created them.\n"
                 + " But this is all besides the point. For now, you should decide on who you really are....\n");
         new CharacterCreator();
-        System.out.println("Wow it really worked first try!!");
+        System.out.println("To be continued.......");
     }
 }
 

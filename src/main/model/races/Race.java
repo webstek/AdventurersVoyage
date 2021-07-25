@@ -1,7 +1,6 @@
 package model.races;
 
-import model.IntegerMatrix;
-import java.util.ArrayList;
+import model.Statistics;
 
 /**
  * Abstract class that all race subclasses are based upon. The race class contains a species name, description, list of
@@ -14,8 +13,8 @@ public abstract class Race {
     protected String description = null;
     protected String strengths;
     protected String weaknesses;
-    protected IntegerMatrix baseStats;
-    protected IntegerMatrix lvlUpStats;
+    protected Statistics baseStats;
+    protected Statistics lvlUpStats;
     protected int hpGain;
     protected int mpGain;
 
@@ -48,12 +47,12 @@ public abstract class Race {
     }
 
     // EFFECTS: returns the baseStats IntegerMatrix
-    public IntegerMatrix stats() {
+    public Statistics stats() {
         return baseStats;
     }
 
     // EFFECTS: returns the lvlUpStats IntegerMatrix
-    public IntegerMatrix lvlUpStats() {
+    public Statistics lvlUpStats() {
         return lvlUpStats;
     }
 

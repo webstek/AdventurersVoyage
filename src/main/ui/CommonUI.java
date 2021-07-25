@@ -1,7 +1,7 @@
 package ui;
 
 import java.util.Scanner;
-import model.IntegerMatrix;
+import model.Statistics;
 import model.ItemMatrix;
 import model.items.*;
 import model.professions.*;
@@ -29,7 +29,7 @@ public abstract class CommonUI {
 
     // REQUIRES: the dimensions of IntegerMatrix to be 2 by 7
     // EFFECTS: returns a nicely formatted version of all the Stats fields in a single string.
-    public String displayStats(IntegerMatrix stats, boolean withHealth) {
+    public String displayStats(Statistics stats, boolean withHealth) {
         // Width is 31 units across
         StringBuilder formattedStats = new StringBuilder("|      Statistics Summary     |\n"
                 + "|-----------------------------|\n");
@@ -47,9 +47,9 @@ public abstract class CommonUI {
 
     // REQUIRES: the dimensions of IntegerMatrix to be 2 by 7
     // EFFECTS: returns a nicely formatted version of the bonus stats fields in a single string.
-    public String displayBonus(IntegerMatrix bnsStats) {
+    public String displayBonus(Statistics bnsStats) {
         // Width is 31 units across
-        StringBuilder formattedStats = new StringBuilder("|-----------------------------|\n");
+        StringBuilder formattedStats = new StringBuilder("");
         for (int i = 0; i < 5; i++) {
             formattedStats.append("| ").append(STAT_NAMES[i]).append(": +").append(bnsStats.in(1, i)).append("\n");
         }
@@ -86,7 +86,7 @@ public abstract class CommonUI {
             if (includeStats) {
                 inventorySummary.append(displayBonus(item.stats())).append("\n");
             }
-            inventorySummary.append("-------------------------------\n");
+            inventorySummary.append("|-----------------------------|\n");
         }
         return inventorySummary.toString();
     }

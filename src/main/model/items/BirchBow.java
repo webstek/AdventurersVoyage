@@ -1,6 +1,6 @@
 package model.items;
 
-import model.IntegerMatrix;
+import model.Statistics;
 
 /**
  * Birch Bow item, starting weapon of the ranger.
@@ -17,6 +17,6 @@ public class BirchBow extends Item {
     // MODIFIES: this
     // EFFECTS: sets the Birch Bow's stats
     protected void setItemStats() {
-        this.itemStats = new IntegerMatrix(new int[][]{{0,0,0,0,0,0,0},{0,0,0,0,0,15,0}});
+        this.itemStats = new Statistics(new int[][]{{0,0,0,0,0,0,0},{0,0,0,0,0,15,0}});
     }
 }

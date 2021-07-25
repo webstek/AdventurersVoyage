@@ -1,6 +1,6 @@
 package model.professions;
 
-import model.IntegerMatrix;
+import model.Statistics;
 import model.abilities.*;
 import java.util.ArrayList;
 
@@ -19,8 +19,8 @@ public class Ranger extends Profession {
 
     // MODIFIES: this
     // EFFECTS: sets the correct values in the bonusStats field
-    protected IntegerMatrix setBonusStats() {
-        return new IntegerMatrix(new int[][]{{0,0,0,0,0,0,0},{0,0,2,4,2,0,0}});
+    protected Statistics setBonusStats() {
+        return new Statistics(new int[][]{{0,0,0,0,0,0,0},{0,0,2,4,2,0,0}});
     }
 
 }

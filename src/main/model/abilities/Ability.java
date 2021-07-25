@@ -1,6 +1,7 @@
 package model.abilities;
 
-import model.IntegerMatrix;
+import model.Statistics;
+import model.entities.*;
 
 // TODO determine if Ability class must be modified to work with BattleEffects / how is damage computed.
 
@@ -12,13 +13,19 @@ import model.IntegerMatrix;
 public abstract class Ability {
     protected String name;
     protected String description;
-    protected IntegerMatrix statsEffect;
-    protected int fstCost;
+    protected Statistics statsEffect;
+    protected Statistics entityStats;
+    protected int combatAction;
     protected int turnDuration = 0;
     protected boolean applyEveryTurn = false;
 
+    // MODIFIES: this
     // EFFECT: sets the correct statsEffect for the
     protected abstract void setStatsEffect();
+
+    // MODIFIES: this
+    // EFFECT: gets the current stats of the entity class handed to it
+    protected abstract void getEntityStats(Entity entity);
 
     // EFFECT: returns the name of the ability
     public String name() {
@@ -31,14 +38,14 @@ public abstract class Ability {
     }
 
     // EFFECT: returns the statsEffect of the Ability. Note that damage is negative Hp
-    public IntegerMatrix getStatsEffect() {
+    public Statistics getStatsEffect() {
         return statsEffect;
     }
 
     // TODO update fstCost with combatAction i think
     // EFFECT: returns the fstCost to use the ability in combat
     public int fstCost() {
-        return fstCost;
+        return combatAction;
     }
 
     // EFFECT: returns the number of turns the statsEffect should be applied for

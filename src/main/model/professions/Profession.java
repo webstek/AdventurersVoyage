@@ -1,6 +1,6 @@
 package model.professions;
 
-import model.IntegerMatrix;
+import model.Statistics;
 import model.abilities.Ability;
 import java.util.ArrayList;
 
@@ -12,10 +12,10 @@ import java.util.ArrayList;
 public abstract class Profession {
     protected String title = null;
     protected ArrayList<Ability> abilities = new ArrayList<>();
-    protected IntegerMatrix bonusStats;
+    protected Statistics bonusStats;
 
     // EFFECT: Sets the appropriate bonusStats for each profession. Called in the constructors.
-    protected abstract IntegerMatrix setBonusStats();
+    protected abstract Statistics setBonusStats();
 
     // EFFECT: returns the title of the profession
     public String getTitle() {
@@ -28,7 +28,7 @@ public abstract class Profession {
     }
 
     // EFFECT: returns the IntegerMatrix of bonus stats from the profession
-    public IntegerMatrix stats() {
+    public Statistics stats() {
         return bonusStats;
     }
 }

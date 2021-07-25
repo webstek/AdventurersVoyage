@@ -1,13 +1,13 @@
 package model.items;
 
-import model.IntegerMatrix;
+import model.Statistics;
 
 /**
  * Representation of items. Items have a name, bonus stats, penalty stats, and a description.
  */
 
 public abstract class Item {
-    protected IntegerMatrix itemStats;
+    protected Statistics itemStats;
     protected String name;
     protected String description;
 
@@ -16,7 +16,7 @@ public abstract class Item {
     protected abstract void setItemStats();
 
     // EFFECTS: returns the itemStats
-    public IntegerMatrix stats() {
+    public Statistics stats() {
         return itemStats;
     }
 
