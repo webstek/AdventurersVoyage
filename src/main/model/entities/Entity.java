@@ -24,7 +24,7 @@ public abstract class Entity {
     protected ArrayList<Entity> entitiesInRange;
     protected boolean isHostile = false;
     protected String name;
-    protected int combatActions = 0;
+    protected int combatActions;
     protected int xp = 0;
     protected int level = 0;
     protected int gold = 0;
@@ -49,9 +49,10 @@ public abstract class Entity {
         this.stats.add(prof.stats());
     }
 
-    // EFFECTS: returns the current stats matrix of the player
-    public Statistics stats() {
-        return stats;
+    // MODIFIES: this
+    // EFFECTS: sets the combatActions to the total Speed statistic
+    public void resetCombatActions() {
+        this.combatActions = this.stats.getStat(2);
     }
 
     // MODIFIES: this
@@ -67,6 +68,11 @@ public abstract class Entity {
     public void dropFromInventory(Item item) {
         this.inventory.sub(item);
         this.stats.sub(item.stats());
+    }
+
+    // EFFECTS: returns the current stats matrix of the player
+    public Statistics stats() {
+        return stats;
     }
 
     // EFFECTS: returns the ItemMatrix field

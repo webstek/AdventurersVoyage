@@ -1,6 +1,5 @@
 package model;
 
-// TODO Write test class for this class
 
 /**
  * Representation of all statistics for the game. The following table represents which values are stored where:

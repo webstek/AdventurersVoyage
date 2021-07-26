@@ -3,7 +3,6 @@ package model.abilities;
 import model.Statistics;
 import model.entities.*;
 
-// TODO determine if Ability class must be modified to work with BattleEffects / how is damage computed.
 
 /**
  * Abstract Ability class for all the abilities that can be used / passively active in combat. The Ability class has a
@@ -43,7 +42,6 @@ public abstract class Ability {
         return statsEffect;
     }
 
-    // TODO update fstCost with combatAction i think
     // EFFECT: returns the fstCost to use the ability in combat
     public int fstCost() {
         return combatAction;

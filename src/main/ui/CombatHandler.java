@@ -30,13 +30,14 @@ public class CombatHandler extends CommonUI {
     // MODIFIES: this
     // EFFECTS: main method for displaying what is happening in a battle
     private void enterCombat() {
-        while (info.isAnAgroedEnemy()) {
+        while (info.isEnemyToFight()) {
             info.startTurn();
-            Entity entityOnTurn = info.getBigSpeedEntity();
+            Entity entityOnTurn = info.getMostCombatActionsEntity();
             while (!info.isTurnOver()) {
                 if (!entityOnTurn.hostility()) {
                     System.out.println("It's your time to act! Choose something to do!");
                     displayAbilities(entityOnTurn.getProfession(),false);
+                    //TODO make option to end actionPhase with combatActions remaining, make a print for this option
                     System.out.println("So which ability will you choose?");
                     tryUsingAbility(entityOnTurn);
                     info.endActionPhase();

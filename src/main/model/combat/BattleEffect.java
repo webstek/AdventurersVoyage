@@ -15,6 +15,7 @@ public class BattleEffect {
     private int turnsRemaining;
     private ArrayList<Entity> targets;
     private Entity user;
+    private boolean applyAtEndOfActionPhase = true;
 
     // EFFECT: sets all the fields of the BattleEffects according to the ability, targets, and user parameters
     public BattleEffect(Ability ability, ArrayList<Entity> targets, Entity user) {
@@ -22,5 +23,11 @@ public class BattleEffect {
         this.turnsRemaining = ability.getTurnDuration();
         this.targets = targets;
         this.user = user;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: sets the applyDuringActionPhase field.
+    public void setApplyAtEndOfActionPhase(boolean bool) {
+        this.applyAtEndOfActionPhase = bool;
     }
 }

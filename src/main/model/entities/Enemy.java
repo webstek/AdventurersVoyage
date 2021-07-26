@@ -10,12 +10,11 @@ import java.util.ArrayList;
  * methods to interact with in combat.
  */
 public abstract class Enemy extends Entity {
-    protected ArrayList<Ability> abilities = new ArrayList<Ability>();
+    protected ArrayList<Ability> abilities = new ArrayList<>();
 
     // MODIFIES: this
     // EFFECTS: adds the unique Abilities of the enemy to the abilities list;
     protected abstract void setAbilities();
-
 
     // EFFECTS: returns the string that gives a detailed explanation of the enemy
     public abstract String getDescription();

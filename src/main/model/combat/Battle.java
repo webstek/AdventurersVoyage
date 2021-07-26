@@ -6,6 +6,8 @@ import model.exceptions.InsufficientResourceException;
 
 import java.util.ArrayList;
 
+// TODO Complete all methods and method specifiers
+
 /**
  * Class representing a battle happening. This class has the methods to apply BattleEffects and determine turn order.
  * Also handles rewards that are dropped from enemies. .........
@@ -14,40 +16,67 @@ import java.util.ArrayList;
 public class Battle {
     private int turn = 0;
     private ArrayList<BattleEffect> effectsToApply = new ArrayList<>();
-    private ArrayList<Entity> enemies = new ArrayList<>();
+    private ArrayList<Entity> enemiesInCombat = new ArrayList<>();
     private Player playerInCombat;
 
+    // EFFECTS: sets the playerInCombat and Enemies fields
     public Battle(Player player, ArrayList<Entity> enemies) {
         this.playerInCombat = player;
-        this.enemies = enemies;
+        this.enemiesInCombat = enemies;
     }
 
+    // MODIFIES: this
+    // EFFECTS: appends the parameter btlEff to the effectsToApply list.
     public void addEffect(BattleEffect btlEff) {
         effectsToApply.add(btlEff);
     }
 
-    public boolean isAnAgroedEnemy() {
-        return false;
+    // REQUIRES: btlEff must already be on effectsToApply
+    // MODIFIES: this
+    // EFFECTS: removes btlEff from the effectsToApply list
+    public void subEffect(BattleEffect btlEff) {
+        effectsToApply.remove(btlEff);
     }
 
-    public Entity getBigSpeedEntity() {
+    // EFFECTS: checks to determine if there are any enemies in the enemies ArrayList
+    public boolean isEnemyToFight() {
+        return enemiesInCombat.size() > 0;
+    }
+
+    // EFFECTS: returns the Entity (player or enemy) with the largest value of the combatActions field.
+    public Entity getMostCombatActionsEntity() {
         return null;
     }
 
+    // EFFECTS: checks to determine if any entities have
     public boolean isTurnOver() {
         return true;
     }
 
-    public void add(BattleEffect parse) {
+    // MODIFIES: this, player, enemies
+    // EFFECTS: checks if the user has enough resources to use ability on targets. adds a BattleEffect to effectsToApply
+    //          that correctly represents the ability's effects.
+    public void uses(Entity user, Ability ability, ArrayList<Entity> targets) throws InsufficientResourceException {
+
     }
 
-    public void uses(Entity entity, Ability ability, ArrayList<Entity> targets) throws InsufficientResourceException {
-
-    }
-
+    // MODIFIES: this, player, enemies
+    // EFFECTS: appropriately applies all BattleEffects in effectsToApply and sets the combatActions of all entities
+    //          in battle. Checks if any enemies are dead and removes them from enemies if so.
     public void startTurn() {
     }
 
+    // MODIFIES: this, player, enemies
+    // EFFECTS: applies damage from effects with applyAtEndOfActionPhase set to true, then sets the value to false if
+    //          there are persisting effects, or removes it from effectsToApply if not. Checks if any enemies are dead
+    //          and removes them from enemies if so.
     public void endActionPhase() {
     }
+
+    // MODIFIES: this
+    // EFFECTS: checks enemies' Hp to determine if any have died (hp <= 0). If so, removes them from enemies.
+    public void checkAllEnemiesAlive(ArrayList<Entity> enemies) {
+    }
+
+
 }

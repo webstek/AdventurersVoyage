@@ -6,5 +6,4 @@ public class Main {
     }
 
     //TODO The Story
-    //TODO Battle Class to deal with combat
 }

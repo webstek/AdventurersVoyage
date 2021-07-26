@@ -1,6 +1,5 @@
 package model;
 
-// TODO Write test class for this class
 
 import model.items.Item;
 
