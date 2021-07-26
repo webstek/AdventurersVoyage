@@ -1,76 +1,105 @@
 package ui;
 
 import model.entities.Player;
-import model.items.BirchBow;
+import model.items.FluffyHat;
 import model.races.*;
 import model.professions.*;
-
-import java.sql.SQLOutput;
+import model.exceptions.UserInputException;
 
 public class CharacterCreator extends CommonUI {
+    private Player playerField;
+    boolean raceConfirmed = false;
+    boolean professionConfirmed = false;
 
     // EFFECTS: starts a CharacterCreator object, which loops until the user has confirmed their race and profession.
     //          Creates a player object which has the correct starting stats and items before the constructor finishes.
     public CharacterCreator() {
-        Player player = new Player(getInput("What might your name be, oh adventurous one?"));
-        boolean raceConfirmed = false;
-        boolean professionConfirmed = false;
-        while (!raceConfirmed || !professionConfirmed) {
-            System.out.println(arrangeRacesAndProfessions());
-            String selection = getInput("Type the name of the race or profession you want to know more about");
-            if (!raceConfirmed) {
-                raceConfirmed = raceSelection(player, selection);
-            }
-            if (!professionConfirmed) {
-                professionConfirmed = professionSelection(player, selection);
-            }
-        }
-        System.out.println("And now, " + player.name() + ", you set off on you're journey with... ");
-        System.out.println(displayStats(player.stats(), true));
-        System.out.println(displayInventory(player.getInventory(), true, true));
-
+        characterCreation();
     }
 
-    // MODIFIES: player
-    // EFFECTS: will set the race of player to selection if confirmed and return true. If unconfirmed, returns false.
-    //          Must be updated as new Races are added.
-    private boolean raceSelection(Player player, String selection) {
+    // MODIFIES: this
+    // EFFECTS: loops until the user has confirmed their race and profession. modifies playerField, setting its starting
+    //          name, stats, race, profession, inventory, (all fields).
+    private void characterCreation() {
+        playerField = new Player(getInput("What might your name be, oh adventurous one?"));
+        System.out.println("The currently playable races and professions are: ");
+        while (!raceConfirmed || !professionConfirmed) {
+            System.out.println(arrangeRacesAndProfessions());
+            String selection = getInput("What race or profession do you want to know more about:");
+            raceSelection(selection);
+            professionSelection(selection);
+        }
+        System.out.println("And now, " + playerField.name() + ", you set off on your journey with... ");
+        System.out.println(displayStats(playerField.stats(), true));
+        System.out.println(displayInventory(playerField.getInventory(), true, true));
+    }
+
+    // MODIFIES: this
+    // EFFECTS: will set the race of playerField to selection if confirmed by the user.
+    //          Must be updated as new Professions are added.
+    private void raceSelection(String selection) {
         if ("HUMAN".equalsIgnoreCase(selection)) {
             Human human = new Human();
             getRaceInfo(human);
-            if (getBoolean("Do you want to choose 'Human' as your race? [True/False]")) {
-                player.setRace(human);
-                return true;
+            confirmRace(human);
+            if (raceConfirmed) {
+                System.out.println("Hmf, that isn't very interesting, although it is a good choice.\n");
             }
         }
-        return false;
     }
 
-    // MODIFIES: player
-    // EFFECTS: will set the profession of player to selection if confirmed, and return true. If unconfirmed, returns
-    //          false. Must be updated as new Professions are added.
-    private boolean professionSelection(Player player, String selection) {
+    // MODIFIES: this
+    // EFFECTS: will set the profession of playerField to selection if confirmed by the user.
+    //          Must be updated as new Professions are added.
+    private void professionSelection(String selection) {
         if ("RANGER".equalsIgnoreCase(selection)) {
             Ranger ranger = new Ranger();
             getProfessionInfo(ranger);
-            if (getBoolean("Do you want to choose 'Ranger' as your profession? [True/False]")) {
-                player.setProfession(ranger);
-                player.addToInventory(new BirchBow());
-                return true;
+            confirmProfession(ranger);
+            if (professionConfirmed) {
+                System.out.println("Sneaky sneaky you go through the forest, go get some yummy dinner for yourself.");
             }
         }
-        return false;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: queries the user if they want to confirm the parameter race
+    private void confirmRace(Race race) {
+        try {
+            raceConfirmed = getBoolean("Do you want to choose " + race.getSpecies()
+                    + " as your race? [Yes]/[No]");
+            if (raceConfirmed) {
+                playerField.setRace(race);
+            }
+        } catch (UserInputException e) {
+            confirmRace(race);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: queries the user if they want to confirm the parameter profession
+    private void confirmProfession(Profession profession) {
+        try {
+            professionConfirmed = getBoolean("Do you want to choose " + profession.getTitle()
+                    + " as your profession? [Yes]/[No]");
+            if (professionConfirmed) {
+                playerField.setProfession(profession);
+                playerField.addToInventory(new FluffyHat());
+            }
+        } catch (UserInputException e) {
+            e.printStackTrace();
+        }
     }
 
     // EFFECTS: sets a single string of all the available races and professions in side by side lists. Note this must be
     //          updated as new races and professions are added.
     private String arrangeRacesAndProfessions() {
         // Races column is 11 units across, Professions column is 17 units across. Total width is 31 units
-        return    "|-----------|-----------------|\n"
+        return  "\n|-----------|-----------------|\n"
                 + "|   Races   |   Professions   |\n"
                 + "|===========|=================|\n"
                 + "|   Human   |     Ranger      |\n"
-                + "|-----------|-----------------|";
+                + "|-----------|-----------------|\n";
     }
 
     // EFFECTS: prints the Species, description, strengths and weaknesses, Stats, and lvlUpGains of the requested race
@@ -85,6 +114,11 @@ public class CharacterCreator extends CommonUI {
     // EFFECTS: prints the Title: title, description, list of abilities, and bonusStats of the requested profession
     public void getProfessionInfo(Profession prof) {
         System.out.println("|     Profession Bonuses      |\n" + displayBonus(prof.stats()));
-        System.out.println(displayAbilities(prof));
+        System.out.println(displayAbilities(prof, true));
+    }
+
+    // EFFECTS: returns the player field;
+    public Player createdPlayer() {
+        return playerField;
     }
 }

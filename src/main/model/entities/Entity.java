@@ -2,9 +2,12 @@ package model.entities;
 
 import model.Statistics;
 import model.ItemMatrix;
+import model.exceptions.UserInputException;
 import model.items.*;
 import model.professions.*;
 import model.races.*;
+import model.abilities.*;
+import model.combat.BattleEffect;
 
 import java.util.ArrayList;
 
@@ -29,6 +32,9 @@ public abstract class Entity {
     // MODIFIES: this
     // EFFECTS: sets the race field of the player by a string argument.
     public void setRace(Race race) {
+        for (int i = 0; i < stats.getMaxColumns(); i++) {
+            this.stats.clear(0,i);
+        }
         this.race = race;
         this.stats.add(race.stats());
     }
@@ -36,16 +42,11 @@ public abstract class Entity {
     // MODIFIES: this
     // EFFECTS: sets the profession field of the player by a string argument.
     public void setProfession(Profession prof) {
+        for (int i = 0; i < stats.getMaxColumns(); i++) {
+            this.stats.clear(1,i);
+        }
         this.profession = prof;
         this.stats.add(prof.stats());
-    }
-
-    // MODIFIES: this
-    // EFFECTS: sets the 7 main stats and 5 bonus stats of the player stats field. In the field, indices [1][5] (dmg)
-    //          and [1][6] (mBrn) are reserved for use in damage calculations.
-    protected void setStatsFromRaceAndProfession() {
-        stats.add(race.stats());
-        stats.add(profession.stats());
     }
 
     // EFFECTS: returns the current stats matrix of the player
@@ -83,6 +84,29 @@ public abstract class Entity {
         return level;
     }
 
+    // EFFECTS: returns a BattleEffect constructed from the parameters
+    public BattleEffect parse(Ability ability, ArrayList<Entity> targets) {
+        return new BattleEffect(ability, targets, this);
+    }
 
-    // TODO implement do method
+    // EFFECTS: returns the Ability class corresponding to the parameter string, throws UserInputException if the
+    //          ability is not available to the player.
+    public Ability getAbilityFromString(String abilityName) throws UserInputException {
+        for (Ability ability : this.profession.getAbilities()) {
+            if (abilityName.equalsIgnoreCase(ability.name())) {
+                return ability;
+            }
+        }
+        throw new UserInputException("Please enter an ability you have.\n");
+    }
+
+    // EFFECTS: returns the isHostile value
+    public boolean hostility() {
+        return isHostile;
+    }
+
+    // EFFECTS: returns the profession field object
+    public Profession getProfession() {
+        return profession;
+    }
 }

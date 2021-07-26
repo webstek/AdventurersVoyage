@@ -10,14 +10,14 @@ import java.util.ArrayList;
  * passed to the Battle class which applies the effects to the appropriate entities in battle for the correct duration.
  */
 
-public class BattleEffects {
+public class BattleEffect {
     private Statistics statsEffect;
     private int turnsRemaining;
     private ArrayList<Entity> targets;
     private Entity user;
 
     // EFFECT: sets all the fields of the BattleEffects according to the ability, targets, and user parameters
-    public BattleEffects(Ability ability, ArrayList<Entity> targets, Entity user) {
+    public BattleEffect(Ability ability, ArrayList<Entity> targets, Entity user) {
         this.statsEffect = ability.getStatsEffect();
         this.turnsRemaining = ability.getTurnDuration();
         this.targets = targets;

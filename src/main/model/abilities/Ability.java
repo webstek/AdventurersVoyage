@@ -16,6 +16,7 @@ public abstract class Ability {
     protected Statistics statsEffect;
     protected Statistics entityStats;
     protected int combatAction;
+    protected int numTargets = 1;
     protected int turnDuration = 0;
     protected boolean applyEveryTurn = false;
 
@@ -56,5 +57,10 @@ public abstract class Ability {
     // EFFECT: returns true if the statsEffect should be reapplied every turn, or just exist.
     public boolean isApplyEveryTurn() {
         return applyEveryTurn;
+    }
+
+    // EFFECT: returns the numTargets field
+    public int numTargets() {
+        return numTargets;
     }
 }

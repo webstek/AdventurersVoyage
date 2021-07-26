@@ -23,15 +23,14 @@ public class PowerShot extends Ability {
         getEntityStats(entity);
         int damage = entityStats.damage() + entityStats.getStat(3) + (entity.level() / 2) + 10;
         // Note the d-20 roll is replaced by 10 damage as randomness is not implemented yet.
-        entityStats.add(0,6,damage);
-
+        statsEffect.add(0,6,damage);
     }
 
 
     // MODIFIES: this
     // EFFECTS: sets the Power Shot stats effects. Note the negative Mp indicating mana cost
     protected void setStatsEffect() {
-        this.statsEffect = new Statistics(new int[][]{{0,0,0,0,0,0,-30},{0,0,0,0,0,0,0}});
+        this.statsEffect = new Statistics(new int[][]{{0,0,0,0,0,0,-50},{0,0,0,0,0,0,0}});
         // Note the dmg field is 0 by default
     }
 

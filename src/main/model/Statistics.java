@@ -78,13 +78,20 @@ public class Statistics {
         return matrixData[i][j];
     }
 
-    // EFFECTS: removes all elements from the Inventory and sets length to zero.
+    // MODIFIES: this
+    // EFFECTS: sets all entries to zero.
     public void clear() {
         for (int i = 0; i < maxRows; i++) {
             for (int j = 0; j < maxColumns; j++) {
                 matrixData[i][j] = 0;
             }
         }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: sets matrixData[i][j] to zero.
+    public void clear(int i, int j) {
+        matrixData[i][j] = 0;
     }
 
     // EFFECTS: returns the maxRows field
