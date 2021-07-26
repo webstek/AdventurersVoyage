@@ -33,7 +33,7 @@ public class CombatHandler extends CommonUI {
         while (info.isEnemyToFight()) {
             info.startTurn();
             Entity entityOnTurn = info.getMostCombatActionsEntity();
-            while (!info.isTurnOver()) {
+            while (info.isTurnOngoing()) {
                 if (!entityOnTurn.hostility()) {
                     System.out.println("It's your time to act! Choose something to do!");
                     displayAbilities(entityOnTurn.getProfession(),false);

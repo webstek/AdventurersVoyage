@@ -88,7 +88,7 @@ public abstract class CommonUI {
     // EFFECTS: returns a well formatted summary of a given ability.
     public String displayAbility(Ability a, boolean includeDescription) {
         StringBuilder abilitySummary = new StringBuilder("| " + a.name() + " | "
-                + a.fstCost() + "spd | " + -a.getStatsEffect().in(0,6) + "mp");
+                + a.caCost() + "ca | " + -a.getStatsEffect().in(0,6) + "mp");
         if (includeDescription) {
             abilitySummary.append("\n").append(a.getDescription());
         }

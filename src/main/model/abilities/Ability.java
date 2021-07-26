@@ -43,7 +43,7 @@ public abstract class Ability {
     }
 
     // EFFECT: returns the fstCost to use the ability in combat
-    public int fstCost() {
+    public int caCost() {
         return combatAction;
     }
 

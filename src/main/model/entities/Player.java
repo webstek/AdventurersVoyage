@@ -1,5 +1,7 @@
 package model.entities;
 
+import model.abilities.Slap;
+
 /**
  * Represents the user's player/adventurer. Players have an extra field that is their level. Increasing level applies
  * lvlUpStats and for some players will cause unique effects.
@@ -10,6 +12,14 @@ public class Player extends Entity {
     public Player(String name) {
         this.name = name;
         this.gold = 50;
+        setAbilities();
+    }
+
+    // MODIFIES: this
+    // EFFECTS: sets the abilities list of the player. That is, profession abilities and basic abilities;
+    protected void setAbilities() {
+        abilities.add(new Slap(this));
+        abilities.addAll(this.profession.getAbilities());
     }
 
     // MODIFIES: this

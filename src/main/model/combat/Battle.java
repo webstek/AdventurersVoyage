@@ -17,12 +17,15 @@ public class Battle {
     private int turn = 0;
     private ArrayList<BattleEffect> effectsToApply = new ArrayList<>();
     private ArrayList<Entity> enemiesInCombat = new ArrayList<>();
+    private ArrayList<Entity> entitiesInCombat = new ArrayList<>();
     private Player playerInCombat;
 
     // EFFECTS: sets the playerInCombat and Enemies fields
     public Battle(Player player, ArrayList<Entity> enemies) {
         this.playerInCombat = player;
         this.enemiesInCombat = enemies;
+        this.entitiesInCombat.add(playerInCombat);
+        this.entitiesInCombat.addAll(enemiesInCombat);
     }
 
     // MODIFIES: this
@@ -45,12 +48,24 @@ public class Battle {
 
     // EFFECTS: returns the Entity (player or enemy) with the largest value of the combatActions field.
     public Entity getMostCombatActionsEntity() {
-        return null;
+        Entity mostCombatActionsEntity = playerInCombat; // Entity accumulator
+        for (Entity entity : enemiesInCombat) {
+            if (entity.getCombatActions() > mostCombatActionsEntity.getCombatActions()) {
+                mostCombatActionsEntity = entity;
+            }
+        }
+        return mostCombatActionsEntity;
     }
 
-    // EFFECTS: checks to determine if any entities have
-    public boolean isTurnOver() {
-        return true;
+    // EFFECTS: checks to determine if any entities have combatActions left.
+    public boolean isTurnOngoing() {
+        int numEntitiesWithActions = 0;
+        for (Entity entity : entitiesInCombat) {
+            if (entity.canAct()) {
+                numEntitiesWithActions++;
+            }
+        }
+        return numEntitiesWithActions > 0;
     }
 
     // MODIFIES: this, player, enemies
@@ -77,6 +92,8 @@ public class Battle {
     // EFFECTS: checks enemies' Hp to determine if any have died (hp <= 0). If so, removes them from enemies.
     public void checkAllEnemiesAlive(ArrayList<Entity> enemies) {
     }
+
+    // MODIFIES:
 
 
 }

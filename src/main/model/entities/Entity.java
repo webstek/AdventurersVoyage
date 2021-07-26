@@ -28,6 +28,11 @@ public abstract class Entity {
     protected int xp = 0;
     protected int level = 0;
     protected int gold = 0;
+    protected ArrayList<Ability> abilities = new ArrayList<>();
+
+    // MODIFIES: this
+    // EFFECTS: adds all abilities to the abilities list;
+    protected abstract void setAbilities();
 
     // MODIFIES: this
     // EFFECTS: sets the race field of the player by a string argument.
@@ -55,6 +60,21 @@ public abstract class Entity {
         this.combatActions = this.stats.getStat(2);
     }
 
+    // EFFECTS: compares the combatActions and mana fields to all ability combat Actions costs returning true if there
+    //          are abilities that can be used. Otherwise, returns false if no abilities can be used.
+    public boolean canAct() {
+        boolean[] abilitiesRequirementsState = new boolean[abilities.size()];
+        for (int i = 0; i < abilities.size(); i++) {
+            abilitiesRequirementsState[i] = areRequirementsMetForAbility(abilities.get(i));
+        }
+        return !allFalse(abilitiesRequirementsState);
+    }
+
+    // EFFECTS: returns true if there is enough mana and combatActions to use the ability
+    public boolean areRequirementsMetForAbility(Ability ability) {
+        return ability.getStatsEffect().in(0,6) + stats.in(0,6) > 0 && ability.caCost() < combatActions;
+    }
+
     // MODIFIES: this
     // EFFECTS: adds the parameter item to the inventory list and updates the player stats
     public void addToInventory(Item item) {
@@ -70,7 +90,7 @@ public abstract class Entity {
         this.stats.sub(item.stats());
     }
 
-    // EFFECTS: returns the current stats matrix of the player
+    // EFFECTS: returns the current stats matrix of the entity
     public Statistics stats() {
         return stats;
     }
@@ -78,6 +98,16 @@ public abstract class Entity {
     // EFFECTS: returns the ItemMatrix field
     public ItemMatrix getInventory() {
         return inventory;
+    }
+
+    // EFFECTS: returns the list of abilities an entity can use
+    public ArrayList<Ability> abilities() {
+        return abilities;
+    }
+
+    // EFFECTS: returns the combatActions field value
+    public int getCombatActions() {
+        return combatActions;
     }
 
     // EFFECTS: returns the name string
@@ -114,5 +144,15 @@ public abstract class Entity {
     // EFFECTS: returns the profession field object
     public Profession getProfession() {
         return profession;
+    }
+
+    // EFFECTS: returns true if all values in a boolean[] are false, returns true otherwise;
+    public boolean allFalse(boolean[] booleans) {
+        for (boolean b : booleans) {
+            if (b) {
+                return false;
+            }
+        }
+        return true;
     }
 }
