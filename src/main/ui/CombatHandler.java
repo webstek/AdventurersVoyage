@@ -31,40 +31,47 @@ public class CombatHandler extends CommonUI {
     // EFFECTS: main method for displaying what is happening in a battle
     private void enterCombat() {
         while (info.isEnemyToFight()) {
-            info.startTurn();
+            System.out.println(info.startTurn());
             Entity entityOnTurn = info.getMostCombatActionsEntity();
             while (info.isTurnOngoing()) {
                 if (!entityOnTurn.hostility()) {
+                    combatSummary();
                     System.out.println("It's your time to act! Choose something to do!");
-                    displayAbilities(entityOnTurn.getProfession(),false);
+                    System.out.println(displayAbilities(entityOnTurn.abilities(),false));
                     //TODO make option to end actionPhase with combatActions remaining, make a print for this option
                     System.out.println("So which ability will you choose?");
                     tryUsingAbility(entityOnTurn);
-                    info.endActionPhase();
+                    System.out.println(info.endActionPhase());
                 } else {
-                    System.out.println("Enemy Battle Turn");
+                    combatSummary();
+                    System.out.println(info.getEnemyBattleEffects((Enemy) entityOnTurn));
+                    System.out.println(info.endActionPhase());
                 }
             }
+            info.endTurn();
         }
     }
 
-    // MODIFIES: this
+    // MODIFIES: this, effectsToApply
     // EFFECTS: Queries the user for an ability to use and handles invalid inputs. Calls the info.uses() method to
     //          update the effectsToApply
     private void tryUsingAbility(Entity entity) {
         try {
             Ability chosenAbility = getAbilityString(entity);
-            info.uses(entity,chosenAbility,getTargetsList(chosenAbility));
+            info.uses(entity,chosenAbility,getTargetsList(chosenAbility),true);
         } catch (InsufficientResourceException e) {
             tryUsingAbility(entity);
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: gets an input from the user and selects the associated ability if the string corresponds.
     private Ability getAbilityString(Entity entity) {
         Ability chosenAbility = null;
         try {
-            chosenAbility = entity.getAbilityFromString(sc.next());
+            chosenAbility = entity.getAbilityFromString(getFullInput(null));
         } catch (UserInputException e) {
+            System.out.println(e.getRequest());
             getAbilityString(entity);
         }
         return chosenAbility;
@@ -88,7 +95,7 @@ public class CombatHandler extends CommonUI {
     private Entity getTarget(int targetNumber) {
         Entity target = null;
         try {
-            target = (getTargetFromString(getInput("Select target [" + targetNumber + "]")));
+            target = (getTargetFromString(getFullInput("Select target [" + targetNumber + "]")));
         } catch (UserInputException e) {
             getTarget(targetNumber);
         }
@@ -102,5 +109,19 @@ public class CombatHandler extends CommonUI {
             }
         }
         throw new UserInputException("Please enter an actual target.");
+    }
+
+    // EFFECTS: returns a formatted string of the current Hp and Mana of all entities in combat
+    public void combatSummary() {
+        StringBuilder combatSummary = new StringBuilder("| --------------------------- |");
+        combatSummary.append("\n| ").append(player.name())
+                .append("\n|     Health: ").append(player.stats().in(0,5))
+                .append("\n|     Mana: ").append(player.stats().in(0,6));
+        for (Entity enemy : battleEnemies) {
+            combatSummary.append("\n| ").append(enemy.name())
+                    .append("\n|     Health: ").append(enemy.stats().in(0,5))
+                    .append("\n|     Mana: ").append(enemy.stats().in(0,6));
+        }
+        System.out.println(combatSummary);
     }
 }

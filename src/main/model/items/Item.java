@@ -10,6 +10,7 @@ public abstract class Item {
     protected Statistics itemStats;
     protected String name;
     protected String description;
+    // TODO add ability field so consumables are possible
 
     // MODIFIES: this
     // EFFECTS: sets this Item's stats

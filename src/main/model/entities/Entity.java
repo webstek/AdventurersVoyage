@@ -2,6 +2,7 @@ package model.entities;
 
 import model.Statistics;
 import model.ItemMatrix;
+import model.exceptions.InsufficientResourceException;
 import model.exceptions.UserInputException;
 import model.items.*;
 import model.professions.*;
@@ -21,7 +22,6 @@ public abstract class Entity {
     protected Race race;
     protected Profession profession;
     protected ItemMatrix inventory = new ItemMatrix(3, 6);
-    protected ArrayList<Entity> entitiesInRange;
     protected boolean isHostile = false;
     protected String name;
     protected int combatActions;
@@ -29,6 +29,7 @@ public abstract class Entity {
     protected int level = 0;
     protected int gold = 0;
     protected ArrayList<Ability> abilities = new ArrayList<>();
+    // GOAL: implement entitiesInRange for target selection depending on ability selected;
 
     // MODIFIES: this
     // EFFECTS: adds all abilities to the abilities list;
@@ -52,6 +53,7 @@ public abstract class Entity {
         }
         this.profession = prof;
         this.stats.add(prof.stats());
+        setAbilities();
     }
 
     // MODIFIES: this
@@ -65,14 +67,26 @@ public abstract class Entity {
     public boolean canAct() {
         boolean[] abilitiesRequirementsState = new boolean[abilities.size()];
         for (int i = 0; i < abilities.size(); i++) {
-            abilitiesRequirementsState[i] = areRequirementsMetForAbility(abilities.get(i));
+            try {
+                abilitiesRequirementsState[i] = areRequirementsMetForAbility(abilities.get(i));
+            } catch (InsufficientResourceException ignored) {
+                abilitiesRequirementsState[i] = false;
+            }
         }
         return !allFalse(abilitiesRequirementsState);
     }
 
     // EFFECTS: returns true if there is enough mana and combatActions to use the ability
-    public boolean areRequirementsMetForAbility(Ability ability) {
-        return ability.getStatsEffect().in(0,6) + stats.in(0,6) > 0 && ability.caCost() < combatActions;
+    public boolean areRequirementsMetForAbility(Ability ability) throws InsufficientResourceException {
+        boolean goodMana = ability.getStatsEffect().in(0,6) + stats.in(0,6) > 0;
+        boolean goodCombatActions = ability.caCost() < combatActions;
+        if (!goodMana) {
+            throw new InsufficientResourceException("Not enough mana for " + ability.name() + "!");
+        }
+        if (!goodCombatActions) {
+            throw new InsufficientResourceException("Not enough combat actions for " + ability.name() + "!");
+        }
+        return true;
     }
 
     // MODIFIES: this
@@ -80,6 +94,7 @@ public abstract class Entity {
     public void addToInventory(Item item) {
         this.inventory.add(item);
         this.stats.add(item.stats());
+        // TODO add item ability if item is consumable
     }
 
     // REQUIRES: parameter item in the inventory list
@@ -121,14 +136,14 @@ public abstract class Entity {
     }
 
     // EFFECTS: returns a BattleEffect constructed from the parameters
-    public BattleEffect parse(Ability ability, ArrayList<Entity> targets) {
-        return new BattleEffect(ability, targets, this);
+    public BattleEffect parse(Ability ability, ArrayList<Entity> targets, Boolean actionPhase) {
+        return new BattleEffect(ability, targets, this, actionPhase);
     }
 
     // EFFECTS: returns the Ability class corresponding to the parameter string, throws UserInputException if the
     //          ability is not available to the player.
     public Ability getAbilityFromString(String abilityName) throws UserInputException {
-        for (Ability ability : this.profession.getAbilities()) {
+        for (Ability ability : this.abilities) {
             if (abilityName.equalsIgnoreCase(ability.name())) {
                 return ability;
             }
@@ -154,5 +169,26 @@ public abstract class Entity {
             }
         }
         return true;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: reduces the combatActions field by combatActionCost
+    public void useCombatActions(int combatActionCost) {
+        combatActions -= combatActionCost;
+    }
+
+    // EFFECTS: Returns true if the Health stat is less than or equal to zero, otherwise returns false.
+    public boolean isDead() {
+        return this.stats.in(0,5) <= 0;
+    }
+
+    // EFFECTS: gives xp of the parameter value to the entity;
+    public void receiveXp(int xpReceived) {
+        xp += xpReceived;
+    }
+
+    // EFFECTS: returns the amount of xp the entity has
+    public int xp() {
+        return xp;
     }
 }

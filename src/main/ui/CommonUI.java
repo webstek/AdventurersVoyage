@@ -19,10 +19,20 @@ public abstract class CommonUI {
     static final String[] STAT_NAMES = new String[]{"Intelligence","Strength","Speed","Dexterity","Stealth"};
     Scanner sc = new Scanner(System.in);
 
-    // EFFECTS: returns the full line of input from the scanner that a user enters
+    // EFFECTS: returns the first word of input from the scanner that a user enters. Leave null prompt to skip it.
     public String getInput(String prompt) {
-        System.out.println(prompt);
+        if (prompt != null) {
+            System.out.println(prompt);
+        }
         return sc.next();
+    }
+
+    // EFFECTS: returns the full line from the scanner that a user enters. Leave null prompt to skip it.
+    public String getFullInput(String prompt) {
+        if (prompt != null) {
+            System.out.println(prompt);
+        }
+        return sc.nextLine();
     }
 
     // EFFECTS: returns a boolean after the user is prompted by the string parameter
@@ -75,10 +85,10 @@ public abstract class CommonUI {
     }
 
     // EFFECTS: returns a nicely formatted version of all the abilities of a profession in a single string.
-    public String displayAbilities(Profession prof, boolean includeDescription) {
-        StringBuilder abilitySummary = new StringBuilder("|           Abilities            \n|----------------"
+    public String displayAbilities(ArrayList<Ability> abilities, boolean includeDescription) {
+        StringBuilder abilitySummary = new StringBuilder("|           Abilities          |\n|----------------"
                 + "-------------|\n");
-        for (Ability ability : prof.getAbilities()) {
+        for (Ability ability : abilities) {
             abilitySummary.append(displayAbility(ability, includeDescription)).append("\n");
         }
         abilitySummary.append("|-----------------------------|");
@@ -90,7 +100,7 @@ public abstract class CommonUI {
         StringBuilder abilitySummary = new StringBuilder("| " + a.name() + " | "
                 + a.caCost() + "ca | " + -a.getStatsEffect().in(0,6) + "mp");
         if (includeDescription) {
-            abilitySummary.append("\n").append(a.getDescription());
+            abilitySummary.append("\n| ").append(a.getDescription());
         }
         return abilitySummary.toString();
     }

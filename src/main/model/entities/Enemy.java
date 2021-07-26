@@ -1,6 +1,7 @@
 package model.entities;
 
 import model.abilities.Ability;
+import model.exceptions.InsufficientResourceException;
 import model.exceptions.UserInputException;
 
 import java.util.ArrayList;
@@ -19,18 +20,18 @@ public abstract class Enemy extends Entity {
         this.isHostile = bool;
     }
 
-    // EFFECTS: returns the Ability class corresponding to the parameter string, throws UserInputException if the
-    //          ability is not available to the player.
-    public Ability getAbilityFromString(String abilityName) throws UserInputException {
-        ArrayList<Ability> allAbilities = new ArrayList<>(this.abilities);
-        if (this.profession != null) {
-            allAbilities.addAll(this.profession.getAbilities());
-        }
-        for (Ability ability : allAbilities) {
-            if (abilityName.equalsIgnoreCase(ability.name())) {
-                return ability;
+    // EFFECTS: returns the Ability class corresponding to the position in the abilities list.
+    public Ability getFirstUsableAbility() throws InsufficientResourceException {
+        Ability firstUsableAbility = null;
+        for (Ability ability : abilities) {
+            if (areRequirementsMetForAbility(ability)) {
+                firstUsableAbility = ability;
             }
         }
-        throw new UserInputException("Please enter an ability you have.");
+        if (firstUsableAbility == null) {
+            this.combatActions = 0;
+            throw new InsufficientResourceException("");
+        }
+        return firstUsableAbility;
     }
 }

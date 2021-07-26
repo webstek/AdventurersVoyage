@@ -114,7 +114,7 @@ public class CharacterCreator extends CommonUI {
     // EFFECTS: prints the Title: title, description, list of abilities, and bonusStats of the requested profession
     public void getProfessionInfo(Profession prof) {
         System.out.println("|     Profession Bonuses      |\n" + displayBonus(prof.stats()));
-        System.out.println(displayAbilities(prof, true));
+        System.out.println(displayAbilities(prof.getAbilities(), true));
     }
 
     // EFFECTS: returns the player field;

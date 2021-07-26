@@ -18,6 +18,7 @@ public abstract class Ability {
     protected int numTargets = 1;
     protected int turnDuration = 0;
     protected boolean applyEveryTurn = false;
+    protected int perTurnDamage = 0;
 
     // MODIFIES: this
     // EFFECT: sets the correct statsEffect for the
@@ -60,5 +61,10 @@ public abstract class Ability {
     // EFFECT: returns the numTargets field
     public int numTargets() {
         return numTargets;
+    }
+
+    // EFFECT: returns the perTurnDamage field
+    public int damagePerTurn() {
+        return perTurnDamage;
     }
 }

@@ -12,7 +12,6 @@ public class Player extends Entity {
     public Player(String name) {
         this.name = name;
         this.gold = 50;
-        setAbilities();
     }
 
     // MODIFIES: this

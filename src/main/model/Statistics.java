@@ -3,7 +3,7 @@ package model;
 
 /**
  * Representation of all statistics for the game. The following table represents which values are stored where:
- *
+ *  |                                TypeStatistics                                  | HealthStatistics  |
  *  | -------------------------------------------------------------------------------------------------- |
  *  | Intelligence      | Strength      | Speed      | Dexterity      | Stealth      | Hp     | Mp       |
  *  | ------------------|---------------|------------|----------------|--------------|--------|--------- |
@@ -93,6 +93,18 @@ public class Statistics {
         matrixData[i][j] = 0;
     }
 
+    // MODIFIES: this
+    // EFFECTS: checks if any statistics are less than zero, and clears them if so
+    public void checkForNegativeStats() {
+        for (int i = 0; i < maxRows; i++) {
+            for (int j = 0; j < maxColumns; j++) {
+                if (matrixData[i][j] < 0) {
+                    clear(i,j);
+                }
+            }
+        }
+    }
+
     // EFFECTS: returns the maxRows field
     public int getMaxRows() {
         return maxRows;
@@ -111,6 +123,6 @@ public class Statistics {
 
     // EFFECTS: returns the damage value in the statistic object
     public int damage() {
-        return this.in(0,6);
+        return this.in(1,5);
     }
 }
