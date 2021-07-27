@@ -96,4 +96,23 @@ public class EntityTest {
         humanRangerPlayer.dropFromInventory(fluffyHat);
         assertNull(humanRangerPlayer.getInventory().inPos(1));
     }
+
+    @Test
+    public void addMultipleToInventoryTest() {
+        Item fluffyHat = new FluffyHat();
+        Item groveBow = new BirchBow();
+        humanRangerPlayer.addToInventory(fluffyHat);
+        humanRangerPlayer.addToInventory(groveBow);
+        assertEquals(fluffyHat,humanRangerPlayer.getInventory().inPos(1));
+        assertEquals(groveBow,humanRangerPlayer.getInventory().inPos(2));
+    }
+
+    @Test
+    public void enemyGettingLastAbilityTest() {
+        Enemy caveSlug = new CaveSlug();
+        assertEquals("Slug Bomb", caveSlug.getLastUsableAbility().name());
+        caveSlug.useCombatActions(1);
+        caveSlug.stats().sub(0,6,30);
+        assertEquals("Slap",caveSlug.getLastUsableAbility().name());
+    }
 }

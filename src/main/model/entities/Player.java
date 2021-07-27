@@ -18,8 +18,8 @@ public class Player extends Entity {
     // MODIFIES: this
     // EFFECTS: sets the abilities list of the player. That is, profession abilities and basic abilities;
     protected void setAbilities() {
-        abilities.add(new Slap(this));
         abilities.add(new Wait(this));
+        abilities.add(new Slap(this));
         abilities.addAll(this.profession.getAbilities());
         refreshAbilities();
     }

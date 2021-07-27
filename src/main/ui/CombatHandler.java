@@ -6,6 +6,7 @@ import model.entities.*;
 import model.exceptions.InsufficientResourceException;
 import model.exceptions.UserInputException;
 
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -46,7 +47,7 @@ public class CombatHandler extends CommonUI {
                     getUserSelectedAbility();
                 } else {
                     System.out.println("\n" + entityWithInitiative.name() + " has the initiative!\n");
-                    System.out.println(info.getEnemyBattleEffects((Enemy) entityWithInitiative));
+                    info.getEnemyBattleEffects((Enemy) entityWithInitiative);
                 }
                 System.out.println(info.endActionPhase());
             }

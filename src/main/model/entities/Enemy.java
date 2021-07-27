@@ -2,7 +2,6 @@ package model.entities;
 
 import model.abilities.Ability;
 import model.exceptions.InsufficientResourceException;
-import model.exceptions.UserInputException;
 
 import java.util.ArrayList;
 
@@ -22,16 +21,20 @@ public abstract class Enemy extends Entity {
 
     // EFFECTS: returns the Ability class corresponding to the position in the abilities list.
     public Ability getLastUsableAbility() throws InsufficientResourceException {
-        Ability firstUsableAbility = null;
+        Ability lastUsableAbility = null;
         for (Ability ability : abilities) {
-            if (areRequirementsMetForAbility(ability)) {
-                firstUsableAbility = ability;
+            try {
+                if (areRequirementsMetForAbility(ability)) {
+                    lastUsableAbility = ability;
+                }
+            } catch (InsufficientResourceException e) {
+                System.out.println(e.getMessage());
             }
         }
-        if (firstUsableAbility == null) {
+        if (lastUsableAbility == null) {
             this.combatActions = 0;
-            throw new InsufficientResourceException("");
+            throw new InsufficientResourceException(name + " can't use any abilities!");
         }
-        return firstUsableAbility;
+        return lastUsableAbility;
     }
 }

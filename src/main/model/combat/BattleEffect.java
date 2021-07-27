@@ -57,7 +57,7 @@ public class BattleEffect {
                 target.stats().sub(0,5,initDamage);
                 statsEffect.clear(1,5);
             }
-            if (turnsRemaining > 0) {
+            if (turnsRemaining > 0 && damagePerTurn > 0) {
                 target.stats().sub(0,5,damagePerTurn);
                 happened.append(target.name()).append(" took ").append(damagePerTurn)
                         .append("dmg from ").append(name).append("! ");

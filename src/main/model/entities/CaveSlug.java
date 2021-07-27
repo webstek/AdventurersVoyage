@@ -14,12 +14,12 @@ import model.items.BirchBow;
 public class CaveSlug extends Enemy {
     // EFFECTS: creates the Cave Slug with the correct field values
     public CaveSlug() {
-        this.stats = new Statistics(new int[][]{{2,4,1,2,4,200,50},{0,0,0,0,0,15,0}});
+        this.stats = new Statistics(new int[][]{{1,4,2,2,4,200,50},{0,0,0,0,0,15,0}});
         this.inventory = new ItemMatrix(1,1);
         this.addToInventory(new BirchBow());
         setHostility(true);
         this.name = "Cave Slug";
-        this.combatActions = 1;
+        this.combatActions = 2;
         this.xp = 10;
         this.level = 1;
         this.gold = 1;
@@ -30,8 +30,8 @@ public class CaveSlug extends Enemy {
     // MODIFIES: this
     // EFFECTS: adds the unique Abilities of the enemy to the abilities list;
     protected void setAbilities() {
-//        this.abilities.add(new SlugBomb(this));
         this.abilities.add(new Slap(this));
+        this.abilities.add(new SlugBomb(this));
         refreshAbilities();
     }
 

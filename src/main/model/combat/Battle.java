@@ -143,25 +143,22 @@ public class Battle {
     private String applyAllEffects() {
         StringBuilder applySummary = new StringBuilder();
         for (BattleEffect btlEff : effectsToApply) {
-            applySummary.append(btlEff.apply()).append(" ");
+            applySummary.append(btlEff.apply());
         }
         return applySummary.toString();
     }
 
     // EFFECTS: adds the BattleEffect of the Enemy's first available ability and returns "" if this works, or returns a
     //          message indicating the enemy can't use any ability, setting it's combatActions to zero.
-    public String getEnemyBattleEffects(Enemy enemy) {
+    public void getEnemyBattleEffects(Enemy enemy) {
         try {
             Ability chosenAbility = enemy.getLastUsableAbility().clone();
             ArrayList<Entity> players = new ArrayList<>();
             players.add(playerInCombat);
-            if (enemy.areRequirementsMetForAbility(chosenAbility)) {
-                addEffect(enemy.parse(chosenAbility,players,true));
-            }
+            addEffect(enemy.parse(chosenAbility,players,true));
         } catch (InsufficientResourceException e) {
-            return enemy.name() + "can't use any abilities!";
+            System.out.println(e.getMessage());
         }
-        return "";
     }
 
     // MODIFIES: this, targets, player
@@ -181,5 +178,15 @@ public class Battle {
     // EFFECTS: checks to see if combat should have ended or not.
     public boolean isInCombat() {
         return isInCombat;
+    }
+
+    // EFFECTS: returns the effectsToApply array list
+    public ArrayList<BattleEffect> getEffectsToApply() {
+        return effectsToApply;
+    }
+
+    // EFFECTS: returns the effectsToRemove array list
+    public ArrayList<BattleEffect> getEffectsToRemove() {
+        return effectsToRemove;
     }
 }
