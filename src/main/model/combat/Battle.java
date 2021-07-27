@@ -18,7 +18,7 @@ public class Battle {
     private int turn = 1;
     private ArrayList<BattleEffect> effectsToApply = new ArrayList<>();
     private ArrayList<BattleEffect> effectsToRemove = new ArrayList<>();
-    private ArrayList<Entity> enemiesInCombat = new ArrayList<>();
+    private ArrayList<Entity> enemiesInCombat;
     private ArrayList<Entity> entitiesInCombat = new ArrayList<>();
     private Player playerInCombat;
     private boolean isInCombat = true;
@@ -93,7 +93,7 @@ public class Battle {
     //          there are persisting effects, or removes it from effectsToApply if not. Checks if any enemies are dead
     //          and if so, gives player their items and xp, then removes them from enemies.
     public String endActionPhase() {
-        String phaseDescription = applyAllEffects();
+        String phaseDescription = "\n" + applyAllEffects() + "\n";
         removeDeadEnemies();
         return phaseDescription;
     }
@@ -152,7 +152,7 @@ public class Battle {
     //          message indicating the enemy can't use any ability, setting it's combatActions to zero.
     public String getEnemyBattleEffects(Enemy enemy) {
         try {
-            Ability chosenAbility = enemy.getFirstUsableAbility().clone();
+            Ability chosenAbility = enemy.getLastUsableAbility().clone();
             ArrayList<Entity> players = new ArrayList<>();
             players.add(playerInCombat);
             if (enemy.areRequirementsMetForAbility(chosenAbility)) {

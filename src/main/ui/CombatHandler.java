@@ -39,7 +39,7 @@ public class CombatHandler extends CommonUI {
                 entityWithInitiative.refreshAbilities();
                 if (!entityWithInitiative.hostility()) {
                     System.out.println("\nYou have the initiative! Choose something to do!\n");
-                    System.out.println(displayAbilities(entityWithInitiative.abilities(),true,true));
+                    System.out.println(displayAbilities(entityWithInitiative.abilities(),false,true));
                     //TODO make option to end actionPhase with combatActions remaining, make a print for this option
                     System.out.println("Select an ability to use: ");
                     getUserSelectedAbility();

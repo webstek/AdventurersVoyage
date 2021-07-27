@@ -21,7 +21,7 @@ public abstract class Enemy extends Entity {
     }
 
     // EFFECTS: returns the Ability class corresponding to the position in the abilities list.
-    public Ability getFirstUsableAbility() throws InsufficientResourceException {
+    public Ability getLastUsableAbility() throws InsufficientResourceException {
         Ability firstUsableAbility = null;
         for (Ability ability : abilities) {
             if (areRequirementsMetForAbility(ability)) {

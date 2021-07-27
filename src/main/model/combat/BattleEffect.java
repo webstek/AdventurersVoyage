@@ -20,7 +20,7 @@ public class BattleEffect {
     private int combatActionCost;
     private ArrayList<Entity> targets;
     private Entity user;
-    private boolean applyAtEndOfActionPhase = true;
+    private boolean applyAtEndOfActionPhase;
     private boolean applied = false;
 
     // EFFECT: sets all the fields of the BattleEffects according to the ability, targets, and user parameters
@@ -53,19 +53,20 @@ public class BattleEffect {
         for (Entity target : targets) {
             if (statsEffect.damage() > 0) {
                 happened.append(target.name()).append(" took ").append(initDamage)
-                        .append(" from ").append(name).append("! ");
+                        .append("dmg from ").append(name).append("! ");
                 target.stats().sub(0,5,initDamage);
                 statsEffect.clear(1,5);
             }
             if (turnsRemaining > 0) {
                 target.stats().sub(0,5,damagePerTurn);
                 happened.append(target.name()).append(" took ").append(damagePerTurn)
-                        .append(" from ").append(name).append("! ");
+                        .append("dmg from ").append(name).append("! ");
             }
             if (!applied) {
                 target.stats().add(statsEffect);
                 applied = true;
             }
+            target.stats().checkForNegativeStats();
         }
         return happened.toString();
     }

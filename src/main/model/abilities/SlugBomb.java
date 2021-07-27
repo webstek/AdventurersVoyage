@@ -1,52 +1,50 @@
 package model.abilities;
 
 import model.Statistics;
+import model.entities.CaveSlug;
 import model.entities.Entity;
 
-/**
- * Wait ability. Sets the user's combatActions to zero for the turn.
- */
-
-public class Wait extends Ability {
+public class SlugBomb extends Ability {
     // EFFECTS: sets the name, description, combatAction, and statsEffect quantities, including the correct damage
     //          based on the entity stats passed through the parameter
-    public Wait(Entity entity) {
-        this.name = "Wait";
-        this.description = "Set your combat actions to zero for this turn.";
-        this.combatAction = entity.getCombatActions();
+    public SlugBomb(CaveSlug caveSlug) {
+        this.name = "Slug Bomb";
+        this.description = "The slug bombs its opponent with slime, reducing their base speed by 3 for three turns.";
+        this.turnDuration = 3;
+        this.combatAction = 1;
         setStatsEffect();
-        getEntityStats(entity);
+        getEntityStats(caveSlug);
     }
 
     // EFFECTS: takes a wait object and produces a clone of it
-    public Wait(Wait ability) {
+    public SlugBomb(SlugBomb ability) {
         this.name = ability.name;
         this.description = ability.description;
         this.combatAction = ability.combatAction;
         this.statsEffect = ability.statsEffect.clone();
-        this.entityStats = ability.entityStats;
     }
 
-    // MODIFIES: this
-    // EFFECT: sets the cost of the combatAction of wait to be the current combatAction of the using entity.
+
     public void refreshAbility(Entity entity) {
-        this.combatAction = entity.getCombatActions();
+        getEntityStats(entity);
+        int damage = 0;
+        statsEffect.set(1, 5, damage);
     }
 
     // EFFECTS: returns a clone of the Ability the method is called on
     public Ability clone() {
-        return new Wait(this);
+        return new SlugBomb(this);
     }
 
     // MODIFIES: this
-    // EFFECTS: sets the Wait stats effects.
+    // EFFECTS: sets the SlugBomb stats effects.
     protected void setStatsEffect() {
-        statsEffect = new Statistics(new int[][]{{0,0,0,0,0,0,0},{0,0,0,0,0,0,0}});
+        this.statsEffect = new Statistics(new int[][]{{0, 0, -3, 0, 0, 0, -30}, {0, 0, 0, 0, 0, 0, 0}});
     }
 
     // MODIFIES: this
     // EFFECTS: sets the entityStats field with current stats of the entity object passed into it
     protected void getEntityStats(Entity entity) {
-        entityStats = entity.stats();
+        this.entityStats = entity.stats();
     }
 }
