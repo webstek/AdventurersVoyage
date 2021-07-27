@@ -2,6 +2,7 @@ package ui;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+
 import model.Statistics;
 import model.ItemMatrix;
 import model.entities.Entity;
@@ -21,6 +22,7 @@ public abstract class CommonUI {
 
     // EFFECTS: returns the first word of input from the scanner that a user enters. Leave null prompt to skip it.
     public String getInput(String prompt) {
+        sc.reset();
         if (prompt != null) {
             System.out.println(prompt);
         }
@@ -29,6 +31,7 @@ public abstract class CommonUI {
 
     // EFFECTS: returns the full line from the scanner that a user enters. Leave null prompt to skip it.
     public String getFullInput(String prompt) {
+        sc.reset();
         if (prompt != null) {
             System.out.println(prompt);
         }
@@ -37,7 +40,9 @@ public abstract class CommonUI {
 
     // EFFECTS: returns a boolean after the user is prompted by the string parameter
     public boolean getBoolean(String prompt) throws UserInputException {
-        System.out.println(prompt);
+        if (prompt != null) {
+            System.out.println(prompt);
+        }
         String input = sc.next();
         if (input.equalsIgnoreCase("TRUE") || input.equalsIgnoreCase("Y")
                 || input.equalsIgnoreCase("YES")) {

@@ -39,20 +39,13 @@ public class Battle {
         effectsToRemove.add(btlEff);
     }
 
-    // REQUIRES: btlEff must already be on effectsToApply
-    // MODIFIES: this
-    // EFFECTS: removes btlEff from the effectsToApply list
-    public void subEffect(BattleEffect btlEff) {
-        effectsToApply.remove(btlEff);
-    }
-
     // EFFECTS: checks to determine if there are any enemies in the enemies ArrayList
-    public boolean isEnemyToFight() {
-        return enemiesInCombat.size() > 0;
+    public void isStillInCombat() {
+        isInCombat = enemiesInCombat.size() > 0;
     }
 
     // EFFECTS: returns the Entity (player or enemy) with the largest value of the combatActions field.
-    public Entity getMostCombatActionsEntity() {
+    public Entity getHighestCombatActionsEntity() {
         Entity mostCombatActionsEntity = playerInCombat; // Entity accumulator
         for (Entity entity : enemiesInCombat) {
             if (entity.getCombatActions() > mostCombatActionsEntity.getCombatActions()) {
@@ -106,7 +99,8 @@ public class Battle {
     }
 
     // MODIFIES: this, player, enemies
-    // EFFECTS: removes dead enemies and gives the player their xp and items.
+    // EFFECTS: removes dead enemies and gives the player their xp and items. Calls isStillInCombat after updating
+    //          enemiesInCombat.
     private void removeDeadEnemies() {
         ArrayList<Entity> deadEnemies = getAllEnemiesDead();
         if (deadEnemies.size() > 0) {
@@ -114,6 +108,7 @@ public class Battle {
                 enemiesInCombat.remove(enemy);
             }
         }
+        isStillInCombat();
     }
 
     // MODIFIES: this
@@ -127,7 +122,6 @@ public class Battle {
                 deadEnemies.add(enemy);
             }
         }
-        isEnemyToFight();
         return deadEnemies;
     }
 
@@ -149,7 +143,7 @@ public class Battle {
     private String applyAllEffects() {
         StringBuilder applySummary = new StringBuilder();
         for (BattleEffect btlEff : effectsToApply) {
-            applySummary.append(btlEff.apply()).append("\n");
+            applySummary.append(btlEff.apply()).append(" ");
         }
         return applySummary.toString();
     }
@@ -164,7 +158,6 @@ public class Battle {
             if (enemy.areRequirementsMetForAbility(chosenAbility)) {
                 addEffect(enemy.parse(chosenAbility,players,true));
             }
-
         } catch (InsufficientResourceException e) {
             return enemy.name() + "can't use any abilities!";
         }
@@ -173,9 +166,8 @@ public class Battle {
 
     // MODIFIES: this, targets, player
     // EFFECTS: checks if any BattleEffects have expired and removes them from players and effectsToApply if so.
+    //          Leveling up is handled by LevelUpHandler class in the ui package.
     public void endTurn() {
-        ArrayList<BattleEffect> effectsToRemove = new ArrayList<>();
-
         for (BattleEffect btlEff : effectsToRemove) {
             if (btlEff.getTurnsRemaining() == 0) {
                 btlEff.remove();
@@ -186,6 +178,7 @@ public class Battle {
         }
     }
 
+    // EFFECTS: checks to see if combat should have ended or not.
     public boolean isInCombat() {
         return isInCombat;
     }

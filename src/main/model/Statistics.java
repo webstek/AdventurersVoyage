@@ -67,6 +67,12 @@ public class Statistics implements Cloneable {
     }
 
     // MODIFIES: this
+    // EFFECTS: sets matrixData[i][j] to val
+    public void set(int i, int j, int val) {
+        matrixData[i][j] = val;
+    }
+
+    // MODIFIES: this
     // EFFECTS: changes the values in this matrixData to the difference of the modifyerStats matrixData values.
     public void sub(Statistics modifyerStats) {
         for (int i = 0; i < maxRows; i++) {

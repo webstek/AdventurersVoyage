@@ -72,6 +72,7 @@ public class CharacterCreator extends CommonUI {
                 playerField.setRace(race);
             }
         } catch (UserInputException e) {
+            System.out.println(e.getMessage());
             confirmRace(race);
         }
     }
@@ -87,7 +88,8 @@ public class CharacterCreator extends CommonUI {
                 playerField.addToInventory(new FluffyHat());
             }
         } catch (UserInputException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
+            confirmProfession(profession);
         }
     }
 

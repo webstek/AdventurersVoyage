@@ -24,8 +24,8 @@ public abstract class Ability implements Cloneable {
     public abstract Ability clone();
 
     // MODIFIES: this
-    // EFFECT: sets the damage of the ability based on the entity that is using it
-    public abstract void setDamage(Entity entity);
+    // EFFECT: refreshes what the calculable effects of the ability should be. E.x. damage or combatAction cost.
+    public abstract void refreshAbility(Entity entity);
 
     // MODIFIES: this
     // EFFECT: sets the correct statsEffect for the ability, except for the damage stat, must be set separately

@@ -33,21 +33,21 @@ public class CombatHandler extends CommonUI {
         System.out.println(" ---------------- Battle start! --------------- ");
         while (info.isInCombat()) {
             System.out.println(info.startTurn());
-            Entity entityOnTurn = info.getMostCombatActionsEntity();
             while (info.isTurnOngoing() && info.isInCombat()) {
-                if (!entityOnTurn.hostility()) {
-                    combatSummary();
-                    System.out.println("| It's your time to act! Choose something to do!");
-                    System.out.println(displayAbilities(entityOnTurn.abilities(),false,true));
+                Entity entityWithInitiative = info.getHighestCombatActionsEntity();
+                combatSummary();
+                entityWithInitiative.refreshAbilities();
+                if (!entityWithInitiative.hostility()) {
+                    System.out.println("\nYou have the initiative! Choose something to do!\n");
+                    System.out.println(displayAbilities(entityWithInitiative.abilities(),true,true));
                     //TODO make option to end actionPhase with combatActions remaining, make a print for this option
-                    System.out.println("So which ability will you choose?");
-                    tryUsingAbility(entityOnTurn);
-                    System.out.println(info.endActionPhase());
+                    System.out.println("Select an ability to use: ");
+                    getUserSelectedAbility();
                 } else {
-                    combatSummary();
-                    System.out.println(info.getEnemyBattleEffects((Enemy) entityOnTurn));
-                    System.out.println(info.endActionPhase());
+                    System.out.println("\n" + entityWithInitiative.name() + " has the initiative!\n");
+                    System.out.println(info.getEnemyBattleEffects((Enemy) entityWithInitiative));
                 }
+                System.out.println(info.endActionPhase());
             }
             info.endTurn();
         }
@@ -57,31 +57,32 @@ public class CombatHandler extends CommonUI {
     // MODIFIES: this, effectsToApply
     // EFFECTS: Queries the user for an ability to use and handles invalid inputs. Calls the info.uses() method to
     //          update the effectsToApply
-    private void tryUsingAbility(Entity entity) {
+    private void getUserSelectedAbility() {
         try {
-            Ability chosenAbility = getAbilityString(entity);
+            Ability chosenAbility = chooseAbility(player);
             ArrayList<Entity> chosenTargets = new ArrayList<>();
             if (battleEnemies.size() == 1) {
                 chosenTargets.add(battleEnemies.get(0));
             } else {
-                getTargetsList(chosenAbility);
+                chosenTargets = getTargetsList(chosenAbility);
             }
-            info.addEffect(info.uses(entity,chosenAbility,chosenTargets,true));
+            info.addEffect(info.uses(player,chosenAbility,chosenTargets,true));
         } catch (InsufficientResourceException e) {
-            tryUsingAbility(entity);
+            System.out.println(e.getMessage());
+            getUserSelectedAbility();
         }
     }
 
     // MODIFIES: this
     // EFFECTS: gets an input from the user and selects the associated ability if the string corresponds.
-    private Ability getAbilityString(Entity entity) {
-        Ability chosenAbility = null;
+    private Ability chooseAbility(Entity entity) {
+        Ability chosenAbility;
         try {
             chosenAbility = entity.getAbilityFromString(getFullInput(null));
             return chosenAbility;
         } catch (UserInputException e) {
-            System.out.println(e.getRequest());
-            return getAbilityString(entity);
+            System.out.println(e.getMessage());
+            return chooseAbility(entity);
         }
     }
 

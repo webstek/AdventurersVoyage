@@ -37,11 +37,10 @@ public abstract class Entity {
 
     // REQUIRES: setAbilities() must be called at least once beforehand
     // MODIFIES: this
-    // EFFECTS: calculates the damage for all abilities:
-    public void calculateAbilityDamages() {
+    // EFFECTS: refreshes calculable values for all abilities of an entity.
+    public void refreshAbilities() {
         for (Ability ability : abilities) {
-            ability.getStatsEffect().clear(1,5);
-            ability.setDamage(this);
+            ability.refreshAbility(this);
         }
     }
 
@@ -81,7 +80,6 @@ public abstract class Entity {
                 abilitiesRequirementsState[i] = areRequirementsMetForAbility(abilities.get(i));
             } catch (InsufficientResourceException e) {
                 abilitiesRequirementsState[i] = false;
-                e.notification();
             }
         }
         return !allFalse(abilitiesRequirementsState);
@@ -148,19 +146,23 @@ public abstract class Entity {
 
     // EFFECTS: returns a BattleEffect constructed from the parameters
     public BattleEffect parse(Ability ability, ArrayList<Entity> targets, Boolean actionPhase) {
-        calculateAbilityDamages();
+        refreshAbilities();
         return new BattleEffect(ability, targets, this, actionPhase);
     }
 
     // EFFECTS: returns the Ability class corresponding to the parameter string, throws UserInputException if the
     //          ability is not available to the player.
     public Ability getAbilityFromString(String abilityName) throws UserInputException {
+        Ability abilityWithName = null;
         for (Ability ability : this.abilities) {
-            if (abilityName.equalsIgnoreCase(ability.name())) {
-                return ability;
+            if (ability.name().equalsIgnoreCase(abilityName)) {
+                abilityWithName = ability;
             }
         }
-        throw new UserInputException("Please enter an ability you have.\n");
+        if (abilityWithName == null) {
+            throw new UserInputException("Please enter an ability you have.");
+        }
+        return abilityWithName;
     }
 
     // EFFECTS: returns the isHostile value

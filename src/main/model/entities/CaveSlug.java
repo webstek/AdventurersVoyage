@@ -32,7 +32,7 @@ public class CaveSlug extends Enemy {
     protected void setAbilities() {
         this.abilities.add(new SlugBomb());
         this.abilities.add(new Slap(this));
-        calculateAbilityDamages();
+        refreshAbilities();
     }
 
     // EFFECTS: returns the string that gives a detailed explanation of the enemy
@@ -57,7 +57,7 @@ public class CaveSlug extends Enemy {
             this.statsEffect = ability.statsEffect.clone();
         }
 
-        public void setDamage(Entity entity) {
+        public void refreshAbility(Entity entity) {
             getEntityStats(entity);
             int damage = 0;
             statsEffect.add(1,5,damage);

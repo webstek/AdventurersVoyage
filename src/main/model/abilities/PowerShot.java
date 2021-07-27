@@ -13,21 +13,21 @@ public class PowerShot extends Ability {
         setStatsEffect();
     }
 
-    // MODIFIES: this
-    // EFFECT: sets the damage of the ability based on the entity that is using it
-    public void setDamage(Entity entity) {
-        getEntityStats(entity);
-        int damage = 5 * (entityStats.damage() + entityStats.getStat(3) + (entity.level() / 2) + 10);
-        // Note the d-20 roll is replaced by 10 damage as randomness is not implemented yet.
-        statsEffect.add(1,5,damage);
-    }
-
     // EFFECTS: takes a powershot object and produces a clone of it
     public PowerShot(PowerShot ability) {
         this.name = ability.name;
         this.description = ability.description;
         this.combatAction = ability.combatAction;
         this.statsEffect = ability.statsEffect.clone();
+    }
+
+    // MODIFIES: this
+    // EFFECT: sets the damage of the ability based on the entity that is using it
+    public void refreshAbility(Entity entity) {
+        getEntityStats(entity);
+        int damage = 5 * (entityStats.damage() + entityStats.getStat(3) + (entity.level() / 2) + 10);
+        // Note the d-20 roll is replaced by 10 damage as randomness is not implemented yet.
+        statsEffect.set(1,5,damage);
     }
 
     // EFFECTS: returns a clone of the Ability the method is called on

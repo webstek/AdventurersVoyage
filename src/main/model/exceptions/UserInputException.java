@@ -1,16 +1,11 @@
 package model.exceptions;
 
 /**
- *  Not a boolean exception class. Thrown when user input
+ *  Not a boolean exception class. Thrown when user input is not valid for the question
  */
 public class UserInputException extends Exception {
-    private final String errorMessage;
-
     public UserInputException(String errorMessage) {
-        this.errorMessage = errorMessage;
+        super(errorMessage);
     }
 
-    public String getRequest() {
-        return errorMessage;
-    }
 }

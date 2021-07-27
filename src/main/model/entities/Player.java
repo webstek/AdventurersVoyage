@@ -1,6 +1,7 @@
 package model.entities;
 
 import model.abilities.Slap;
+import model.abilities.Wait;
 
 /**
  * Represents the user's player/adventurer. Players have an extra field that is their level. Increasing level applies
@@ -18,14 +19,15 @@ public class Player extends Entity {
     // EFFECTS: sets the abilities list of the player. That is, profession abilities and basic abilities;
     protected void setAbilities() {
         abilities.add(new Slap(this));
+        abilities.add(new Wait(this));
         abilities.addAll(this.profession.getAbilities());
-        calculateAbilityDamages();
+        refreshAbilities();
     }
 
     // MODIFIES: this
     // EFFECTS: checks if the player has enough xp to level up. The xp requirement is always 100. Returns true if the
     //          player can level up, returns false otherwise.
-    private boolean checkLvlUp() {
+    public boolean tryLvlUp() {
         if (this.xp >= 100) {
             this.level += 1;
             this.xp -= 100;
