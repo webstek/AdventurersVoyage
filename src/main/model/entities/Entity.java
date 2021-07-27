@@ -88,7 +88,7 @@ public abstract class Entity {
     // EFFECTS: returns true if there is enough mana and combatActions to use the ability
     public boolean areRequirementsMetForAbility(Ability ability) throws InsufficientResourceException {
         boolean goodMana = ability.getStatsEffect().in(0,6) + stats.in(0,6) >= 0;
-        boolean goodCombatActions = ability.caCost() <= combatActions;
+        boolean goodCombatActions = ability.caCost() <= combatActions && combatActions > 0;
         if (!goodMana) {
             throw new InsufficientResourceException("Not enough mana for " + ability.name() + "!");
         }
@@ -168,6 +168,11 @@ public abstract class Entity {
     // EFFECTS: returns the isHostile value
     public boolean hostility() {
         return isHostile;
+    }
+
+    // EFFECTS: returns the race field object
+    public Race getRace() {
+        return race;
     }
 
     // EFFECTS: returns the profession field object

@@ -32,6 +32,7 @@ public class CombatHandler extends CommonUI {
     private void enterCombat() {
         System.out.println(" ---------------- Battle start! --------------- ");
         while (info.isInCombat()) {
+            // TODO debug Battle.startTurn() method
             System.out.println(info.startTurn());
             while (info.isTurnOngoing() && info.isInCombat()) {
                 Entity entityWithInitiative = info.getHighestCombatActionsEntity();

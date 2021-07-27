@@ -26,7 +26,7 @@ public class AdventurerVoyageApp {
         PLAYER = cc.createdPlayer();
         System.out.println("To be continued.......                            Right now!");
         String dscrpt1 = "\nEvery adventure story needs a training arc, and this one is yours. Just to make sure "
-                + "you are capable enough to \nbe an Adventurer, there is a test you must past. And that test"
+                + "you are capable enough to \nbe an Adventurer, there is a test you must pass. And that test"
                 + " is to defeat the opponent in front of you!";
         new CombatHandler(PLAYER, new Enemy[]{new CaveSlug()}, dscrpt1);
         System.out.println("Congratulations, you have just slapped a cave slug to death! Not the first thing you "

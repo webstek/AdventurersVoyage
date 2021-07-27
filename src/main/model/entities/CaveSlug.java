@@ -30,7 +30,7 @@ public class CaveSlug extends Enemy {
     // MODIFIES: this
     // EFFECTS: adds the unique Abilities of the enemy to the abilities list;
     protected void setAbilities() {
-        this.abilities.add(new SlugBomb(this));
+//        this.abilities.add(new SlugBomb(this));
         this.abilities.add(new Slap(this));
         refreshAbilities();
     }
