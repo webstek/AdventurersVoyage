@@ -12,5 +12,5 @@
 - As a user, I want to obtain items and store them in my inventory.
 - As a user, I want to be able to see what items are in my inventory.
 - As a user, I want to be able to see what stats races and professions have before I choose one.
-- As a user, I want to choose as race and profession to play as.
+- As a user, I want to choose a race and profession to play as.
 - As a user, I want to enage in combat.
