@@ -21,11 +21,11 @@ public class CharacterCreator extends CommonUI {
     // EFFECTS: loops until the user has confirmed their race and profession. modifies playerField, setting its starting
     //          name, stats, race, profession, inventory, (all fields).
     private void characterCreation() {
-        playerField = new Player(getInput("What might your name be, oh adventurous one?"));
-        System.out.println("The currently playable races and professions are: ");
+        playerField = new Player(getFullInput("What might your name be, oh adventurous one?"));
+        System.out.println("The currently playable races and professions are: \n");
         while (!raceConfirmed || !professionConfirmed) {
             System.out.println(arrangeRacesAndProfessions());
-            String selection = getInput("What race or profession do you want to know more about:");
+            String selection = getInput("Enter a race or profession you want to know more about.");
             raceSelection(selection);
             professionSelection(selection);
         }
@@ -95,7 +95,7 @@ public class CharacterCreator extends CommonUI {
     //          updated as new races and professions are added.
     private String arrangeRacesAndProfessions() {
         // Races column is 11 units across, Professions column is 17 units across. Total width is 31 units
-        return  "\n|-----------|-----------------|\n"
+        return    "|-----------|-----------------|\n"
                 + "|   Races   |   Professions   |\n"
                 + "|===========|=================|\n"
                 + "|   Human   |     Ranger      |\n"
@@ -104,17 +104,20 @@ public class CharacterCreator extends CommonUI {
 
     // EFFECTS: prints the Species, description, strengths and weaknesses, Stats, and lvlUpGains of the requested race
     public void getRaceInfo(Race race) {
-        System.out.println(race.getDescription() + "\n Strengths: " + race.getStrengths() + "\n Weaknesses: "
+        System.out.println("|-----------------------------|\n| " + race.getDescription()
+                + "\n|-----------------------------|\n| Strengths: "
+                + race.getStrengths() + "\n| Weaknesses: "
                 + race.getWeaknesses());
-        System.out.println(displayStats(race.stats(), true)
+        System.out.println(displayTypeStats(race.stats()) + "\n" + displayRaceHealthAndMana(race)
                 + "\n| With per level gains of:\n| " + race.getHpGain() + "Hp and " + race.getMpGain() + "Mp."
                 + "\n|-----------------------------|");
     }
 
     // EFFECTS: prints the Title: title, description, list of abilities, and bonusStats of the requested profession
     public void getProfessionInfo(Profession prof) {
-        System.out.println("|     Profession Bonuses      |\n" + displayBonus(prof.stats()));
-        System.out.println(displayAbilities(prof.getAbilities(), true));
+        System.out.println("|-----------------------------|\n| Profession Bonuses:         |\n"
+                + displayBonus(prof.stats()));
+        System.out.println(displayAbilities(prof.getAbilities(), true,false));
     }
 
     // EFFECTS: returns the player field;

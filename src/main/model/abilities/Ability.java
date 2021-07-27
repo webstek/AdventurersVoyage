@@ -9,7 +9,7 @@ import model.entities.*;
  * name, description, and statsEffect which gives mana cost and any other stat effects of the ability.
  */
 
-public abstract class Ability {
+public abstract class Ability implements Cloneable {
     protected String name;
     protected String description;
     protected Statistics statsEffect;
@@ -20,8 +20,15 @@ public abstract class Ability {
     protected boolean applyEveryTurn = false;
     protected int perTurnDamage = 0;
 
+    // EFFECT: returns a copy of the ability the method is called on by calling the clone constructor.
+    public abstract Ability clone();
+
     // MODIFIES: this
-    // EFFECT: sets the correct statsEffect for the
+    // EFFECT: sets the damage of the ability based on the entity that is using it
+    public abstract void setDamage(Entity entity);
+
+    // MODIFIES: this
+    // EFFECT: sets the correct statsEffect for the ability, except for the damage stat, must be set separately
     protected abstract void setStatsEffect();
 
     // MODIFIES: this

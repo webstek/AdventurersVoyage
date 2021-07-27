@@ -24,11 +24,14 @@ public class AdventurerVoyageApp {
                 + " But this is all besides the point. For now, you should decide on who you really are....\n");
         CharacterCreator cc = new CharacterCreator();
         PLAYER = cc.createdPlayer();
-        System.out.println("To be continued.......\n                            Right now!");
+        System.out.println("To be continued.......                            Right now!");
         String dscrpt1 = "\nEvery adventure story needs a training arc, and this one is yours. Just to make sure "
                 + "you are capable enough to \nbe an Adventurer, there is a test you must past. And that test"
                 + " is to defeat the opponent in front of you!";
         new CombatHandler(PLAYER, new Enemy[]{new CaveSlug()}, dscrpt1);
+        System.out.println("Congratulations, you have just slapped a cave slug to death! Not the first thing you "
+                + "think of doing when you wake up, but it was fun nonetheless.");
+        System.out.println("\n\n Thanks for playing! Much much more content is in the works :O");
     }
 }
 

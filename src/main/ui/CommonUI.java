@@ -6,9 +6,9 @@ import model.Statistics;
 import model.ItemMatrix;
 import model.entities.Entity;
 import model.items.Item;
-import model.professions.Profession;
 import model.abilities.Ability;
 import model.exceptions.UserInputException;
+import model.races.Race;
 
 
 /**
@@ -53,8 +53,8 @@ public abstract class CommonUI {
     // EFFECTS: returns a nicely formatted version of all the Stats fields in a single string.
     public String displayStats(Statistics stats, boolean withHealth) {
         // Width is 31 units across
-        StringBuilder formattedStats = new StringBuilder("|      Statistics Summary     |\n"
-                + "|-----------------------------|\n");
+        StringBuilder formattedStats = new StringBuilder("|-----------------------------|\n"
+                + "| Statistics:                 |\n|-----------------------------|\n");
         for (int i = 0; i < 5; i++) {
             formattedStats.append("| ").append(STAT_NAMES[i]).append(": ").append(stats.in(0, i))
                     .append(" + ").append(stats.in(1, i)).append("\n");
@@ -67,38 +67,50 @@ public abstract class CommonUI {
         return formattedStats.toString();
     }
 
-    // EFFECTS: displays the Health and mana of an Entity object
-    public String displayHealthAndMana(Entity entity) {
-        return ("\n| " + entity.name() + " | " + entity.stats().in(0,5) + "Hp | "
-                + entity.stats().in(0,6) + "Mp |");
+    // EFFECTS: returns a nicely formatted version of the baseTypeStats fields in a single string.
+    public String displayTypeStats(Statistics typeStats) {
+        // Width is 31 units across
+        StringBuilder formattedStats = new StringBuilder("|-----------------------------|");
+        for (int i = 0; i < 5; i++) {
+            formattedStats.append("\n| ").append(STAT_NAMES[i]).append(": +").append(typeStats.in(0, i));
+        }
+        return formattedStats.toString();
     }
 
     // EFFECTS: returns a nicely formatted version of the bonus stats fields in a single string.
     public String displayBonus(Statistics bnsStats) {
         // Width is 31 units across
-        StringBuilder formattedStats = new StringBuilder();
+        StringBuilder formattedStats = new StringBuilder("|-----------------------------|");
         for (int i = 0; i < 5; i++) {
-            formattedStats.append("| ").append(STAT_NAMES[i]).append(": +").append(bnsStats.in(1, i)).append("\n");
+            formattedStats.append("\n| ").append(STAT_NAMES[i]).append(": +").append(bnsStats.in(1, i));
         }
-        formattedStats.append("|-----------------------------|");
         return formattedStats.toString();
     }
 
+    // EFFECTS: displays the Health and mana of an Entity object
+    public String displayRaceHealthAndMana(Race race) {
+        return "|-----------------------------|\n" + "| Health: " + race.stats().in(0, 5) + "\n| Mana: "
+                + race.stats().in(0, 6);
+    }
+
     // EFFECTS: returns a nicely formatted version of all the abilities of a profession in a single string.
-    public String displayAbilities(ArrayList<Ability> abilities, boolean includeDescription) {
-        StringBuilder abilitySummary = new StringBuilder("|           Abilities          |\n|----------------"
-                + "-------------|\n");
+    public String displayAbilities(ArrayList<Ability> abilities, boolean includeDescription, boolean includeDamage) {
+        StringBuilder abilitySummary = new StringBuilder("|-----------------------------|\n"
+                + "| Abilities:                  |\n");
         for (Ability ability : abilities) {
-            abilitySummary.append(displayAbility(ability, includeDescription)).append("\n");
+            abilitySummary.append(displayAbility(ability, includeDescription, includeDamage)).append("\n");
         }
         abilitySummary.append("|-----------------------------|");
         return abilitySummary.toString();
     }
 
     // EFFECTS: returns a well formatted summary of a given ability.
-    public String displayAbility(Ability a, boolean includeDescription) {
-        StringBuilder abilitySummary = new StringBuilder("| " + a.name() + " | "
-                + a.caCost() + "ca | " + -a.getStatsEffect().in(0,6) + "mp");
+    public String displayAbility(Ability a, boolean includeDescription, boolean includeDamage) {
+        StringBuilder abilitySummary = new StringBuilder("|-----------------------------|\n" + "| " + a.name() + ": "
+                + a.caCost() + "ca, " + -a.getStatsEffect().in(0,6) + "mp");
+        if (includeDamage) {
+            abilitySummary.append(", ").append(a.getStatsEffect().damage()).append("dmg");
+        }
         if (includeDescription) {
             abilitySummary.append("\n| ").append(a.getDescription());
         }
@@ -110,14 +122,14 @@ public abstract class CommonUI {
         StringBuilder inventorySummary = new StringBuilder("| Inventory:\n|-----------------------------|\n");
         for (int pos = 1; pos <= inventory.length(); pos++) {
             Item item = inventory.inPos(pos);
-            inventorySummary.append(item.name()).append(":\n");
+            inventorySummary.append("| ").append(item.name()).append(":\n");
             if (includeDescription) {
-                inventorySummary.append(item.description()).append("\n");
+                inventorySummary.append("| ").append(item.description()).append("\n");
             }
             if (includeStats) {
                 inventorySummary.append(displayBonus(item.stats())).append("\n");
             }
-            inventorySummary.append("|-----------------------------|\n");
+//            inventorySummary.append("|-----------------------------|\n");
         }
         return inventorySummary.toString();
     }

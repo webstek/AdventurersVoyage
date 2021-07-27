@@ -64,7 +64,6 @@ public class BattleEffect {
             }
             if (!applied) {
                 target.stats().add(statsEffect);
-                happened.append(target.name()).append(" had their stats reduced! ");
                 applied = true;
             }
         }

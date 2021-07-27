@@ -13,7 +13,7 @@ package model;
  *  Can be initialized either into all zeroes or by passing the constructor a full int[][] object.
  */
 
-public class Statistics {
+public class Statistics implements Cloneable {
     private final int[][] matrixData;
     private int maxRows;
     private int maxColumns;
@@ -27,12 +27,22 @@ public class Statistics {
         maxLength = 14;
     }
 
+
+    // EFFECTS: creates a clone statistics object that the method is called on
+    @Override
+    public Statistics clone() {
+        Statistics cloned = new Statistics();
+        cloned.clear();
+        cloned.add(this);
+        return cloned;
+    }
+
     // EFFECTS: sets the correct field data for a 2d array
     public Statistics(int[][] initMatrix) {
         matrixData = initMatrix;
         for (int[] row : initMatrix) {
             maxRows++;
-            for (Object element : row) {
+            for (Object ignored : row) {
                 maxLength++;
             }
         }

@@ -17,9 +17,11 @@ import java.util.ArrayList;
 public class Battle {
     private int turn = 1;
     private ArrayList<BattleEffect> effectsToApply = new ArrayList<>();
+    private ArrayList<BattleEffect> effectsToRemove = new ArrayList<>();
     private ArrayList<Entity> enemiesInCombat = new ArrayList<>();
     private ArrayList<Entity> entitiesInCombat = new ArrayList<>();
     private Player playerInCombat;
+    private boolean isInCombat = true;
 
     // MODIFIES: player, enemies
     // EFFECTS: sets the playerInCombat and Enemies fields
@@ -34,6 +36,7 @@ public class Battle {
     // EFFECTS: appends the parameter btlEff to the effectsToApply list.
     public void addEffect(BattleEffect btlEff) {
         effectsToApply.add(btlEff);
+        effectsToRemove.add(btlEff);
     }
 
     // REQUIRES: btlEff must already be on effectsToApply
@@ -76,7 +79,7 @@ public class Battle {
     public BattleEffect uses(Entity user, Ability ability, ArrayList<Entity> targets, boolean actionPhase)
             throws InsufficientResourceException {
         user.areRequirementsMetForAbility(ability);
-        return user.parse(ability,targets,actionPhase);
+        return user.parse(ability.clone(),targets,actionPhase);
     }
 
     // MODIFIES: this, player, enemies
@@ -97,30 +100,47 @@ public class Battle {
     //          there are persisting effects, or removes it from effectsToApply if not. Checks if any enemies are dead
     //          and if so, gives player their items and xp, then removes them from enemies.
     public String endActionPhase() {
-        return applyAllEffects();
+        String phaseDescription = applyAllEffects();
+        removeDeadEnemies();
+        return phaseDescription;
+    }
+
+    // MODIFIES: this, player, enemies
+    // EFFECTS: removes dead enemies and gives the player their xp and items.
+    private void removeDeadEnemies() {
+        ArrayList<Entity> deadEnemies = getAllEnemiesDead();
+        if (deadEnemies.size() > 0) {
+            for (Entity enemy : deadEnemies) {
+                enemiesInCombat.remove(enemy);
+            }
+        }
     }
 
     // MODIFIES: this
-    // EFFECTS: checks enemies' Hp to determine if any have died (hp <= 0). If so, removes them from enemies and gives
-    //          the player the dead enemy's items and xp.
-    public void checkAllEnemiesAlive() {
+    // EFFECTS: checks enemies' Hp to determine if any have died (hp <= 0). If so, adds them to a list which is returned
+    //          and gives the player the dead enemy's items and xp.
+    public ArrayList<Entity> getAllEnemiesDead() {
+        ArrayList<Entity> deadEnemies = new ArrayList<>();
         for (Entity enemy : enemiesInCombat) {
-            collectDeadEnemyResources((Enemy) enemy);
+            if (enemy.isDead()) {
+                collectDeadEnemyResources((Enemy) enemy);
+                deadEnemies.add(enemy);
+            }
         }
+        isEnemyToFight();
+        return deadEnemies;
     }
 
     // REQUIRES: enemy hp to be <= 0
     // MODIFIES: player
     // EFFECTS: gives the player the dead enemy's items and xp.
     private void collectDeadEnemyResources(Enemy enemy) {
-        if (enemy.isDead()) {
-            for (int i = 1; i < enemy.getInventory().length(); i++) {
-                Item itemToTransfer = enemy.getInventory().inPos(i);
-                playerInCombat.addToInventory(itemToTransfer);
-                enemy.dropFromInventory(itemToTransfer);
-            }
-            playerInCombat.receiveXp(enemy.xp());
+        for (int i = 1; i < enemy.getInventory().length(); i++) {
+            Item itemToTransfer = enemy.getInventory().inPos(i);
+            playerInCombat.addToInventory(itemToTransfer);
+            enemy.dropFromInventory(itemToTransfer);
         }
+        playerInCombat.receiveXp(enemy.xp());
     }
 
     // MODIFIES: player, enemies, this
@@ -138,7 +158,7 @@ public class Battle {
     //          message indicating the enemy can't use any ability, setting it's combatActions to zero.
     public String getEnemyBattleEffects(Enemy enemy) {
         try {
-            Ability chosenAbility = enemy.getFirstUsableAbility();
+            Ability chosenAbility = enemy.getFirstUsableAbility().clone();
             ArrayList<Entity> players = new ArrayList<>();
             players.add(playerInCombat);
             if (enemy.areRequirementsMetForAbility(chosenAbility)) {
@@ -154,7 +174,9 @@ public class Battle {
     // MODIFIES: this, targets, player
     // EFFECTS: checks if any BattleEffects have expired and removes them from players and effectsToApply if so.
     public void endTurn() {
-        for (BattleEffect btlEff : effectsToApply) {
+        ArrayList<BattleEffect> effectsToRemove = new ArrayList<>();
+
+        for (BattleEffect btlEff : effectsToRemove) {
             if (btlEff.getTurnsRemaining() == 0) {
                 btlEff.remove();
                 effectsToApply.remove(btlEff);
@@ -162,5 +184,9 @@ public class Battle {
                 btlEff.decrementTurnsRemaining();
             }
         }
+    }
+
+    public boolean isInCombat() {
+        return isInCombat;
     }
 }

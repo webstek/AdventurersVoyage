@@ -30,14 +30,15 @@ public class CombatHandler extends CommonUI {
     // MODIFIES: this
     // EFFECTS: main method for displaying what is happening in a battle
     private void enterCombat() {
-        while (info.isEnemyToFight()) {
+        System.out.println(" ---------------- Battle start! --------------- ");
+        while (info.isInCombat()) {
             System.out.println(info.startTurn());
             Entity entityOnTurn = info.getMostCombatActionsEntity();
-            while (info.isTurnOngoing()) {
+            while (info.isTurnOngoing() && info.isInCombat()) {
                 if (!entityOnTurn.hostility()) {
                     combatSummary();
-                    System.out.println("It's your time to act! Choose something to do!");
-                    System.out.println(displayAbilities(entityOnTurn.abilities(),false));
+                    System.out.println("| It's your time to act! Choose something to do!");
+                    System.out.println(displayAbilities(entityOnTurn.abilities(),false,true));
                     //TODO make option to end actionPhase with combatActions remaining, make a print for this option
                     System.out.println("So which ability will you choose?");
                     tryUsingAbility(entityOnTurn);
@@ -50,6 +51,7 @@ public class CombatHandler extends CommonUI {
             }
             info.endTurn();
         }
+        System.out.println(" -------------- Battle complete! -------------- ");
     }
 
     // MODIFIES: this, effectsToApply
@@ -58,7 +60,13 @@ public class CombatHandler extends CommonUI {
     private void tryUsingAbility(Entity entity) {
         try {
             Ability chosenAbility = getAbilityString(entity);
-            info.uses(entity,chosenAbility,getTargetsList(chosenAbility),true);
+            ArrayList<Entity> chosenTargets = new ArrayList<>();
+            if (battleEnemies.size() == 1) {
+                chosenTargets.add(battleEnemies.get(0));
+            } else {
+                getTargetsList(chosenAbility);
+            }
+            info.addEffect(info.uses(entity,chosenAbility,chosenTargets,true));
         } catch (InsufficientResourceException e) {
             tryUsingAbility(entity);
         }
@@ -70,11 +78,11 @@ public class CombatHandler extends CommonUI {
         Ability chosenAbility = null;
         try {
             chosenAbility = entity.getAbilityFromString(getFullInput(null));
+            return chosenAbility;
         } catch (UserInputException e) {
             System.out.println(e.getRequest());
-            getAbilityString(entity);
+            return getAbilityString(entity);
         }
-        return chosenAbility;
     }
 
     private ArrayList<Entity> getTargetsList(Ability ability) {
@@ -95,7 +103,7 @@ public class CombatHandler extends CommonUI {
     private Entity getTarget(int targetNumber) {
         Entity target = null;
         try {
-            target = (getTargetFromString(getFullInput("Select target [" + targetNumber + "]")));
+            target = (getTargetFromString(getFullInput("| Select target number [" + targetNumber + "]")));
         } catch (UserInputException e) {
             getTarget(targetNumber);
         }
@@ -115,13 +123,18 @@ public class CombatHandler extends CommonUI {
     public void combatSummary() {
         StringBuilder combatSummary = new StringBuilder("| --------------------------- |");
         combatSummary.append("\n| ").append(player.name())
-                .append("\n|     Health: ").append(player.stats().in(0,5))
-                .append("\n|     Mana: ").append(player.stats().in(0,6));
+                .append("\n|      Health: ").append(player.stats().in(0,5))
+                .append("\n|        Mana: ").append(player.stats().in(0,6))
+                .append("\n|   CmbtActns: ").append(player.getCombatActions())
+                .append("\n| --------------------------- |");
         for (Entity enemy : battleEnemies) {
             combatSummary.append("\n| ").append(enemy.name())
-                    .append("\n|     Health: ").append(enemy.stats().in(0,5))
-                    .append("\n|     Mana: ").append(enemy.stats().in(0,6));
+                    .append("\n|      Health: ").append(enemy.stats().in(0,5))
+                    .append("\n|        Mana: ").append(enemy.stats().in(0,6))
+                    .append("\n|   CmbtActns: ").append(enemy.getCombatActions())
+                    .append("\n| --------------------------- |");
         }
+//        combatSummary.append("\n| --------------------------- |");
         System.out.println(combatSummary);
     }
 }

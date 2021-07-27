@@ -19,6 +19,7 @@ public class Player extends Entity {
     protected void setAbilities() {
         abilities.add(new Slap(this));
         abilities.addAll(this.profession.getAbilities());
+        calculateAbilityDamages();
     }
 
     // MODIFIES: this

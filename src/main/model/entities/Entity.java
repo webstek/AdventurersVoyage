@@ -35,6 +35,16 @@ public abstract class Entity {
     // EFFECTS: adds all abilities to the abilities list;
     protected abstract void setAbilities();
 
+    // REQUIRES: setAbilities() must be called at least once beforehand
+    // MODIFIES: this
+    // EFFECTS: calculates the damage for all abilities:
+    public void calculateAbilityDamages() {
+        for (Ability ability : abilities) {
+            ability.getStatsEffect().clear(1,5);
+            ability.setDamage(this);
+        }
+    }
+
     // MODIFIES: this
     // EFFECTS: sets the race field of the player by a string argument.
     public void setRace(Race race) {
@@ -69,8 +79,9 @@ public abstract class Entity {
         for (int i = 0; i < abilities.size(); i++) {
             try {
                 abilitiesRequirementsState[i] = areRequirementsMetForAbility(abilities.get(i));
-            } catch (InsufficientResourceException ignored) {
+            } catch (InsufficientResourceException e) {
                 abilitiesRequirementsState[i] = false;
+                e.notification();
             }
         }
         return !allFalse(abilitiesRequirementsState);
@@ -78,8 +89,8 @@ public abstract class Entity {
 
     // EFFECTS: returns true if there is enough mana and combatActions to use the ability
     public boolean areRequirementsMetForAbility(Ability ability) throws InsufficientResourceException {
-        boolean goodMana = ability.getStatsEffect().in(0,6) + stats.in(0,6) > 0;
-        boolean goodCombatActions = ability.caCost() < combatActions;
+        boolean goodMana = ability.getStatsEffect().in(0,6) + stats.in(0,6) >= 0;
+        boolean goodCombatActions = ability.caCost() <= combatActions;
         if (!goodMana) {
             throw new InsufficientResourceException("Not enough mana for " + ability.name() + "!");
         }
@@ -137,6 +148,7 @@ public abstract class Entity {
 
     // EFFECTS: returns a BattleEffect constructed from the parameters
     public BattleEffect parse(Ability ability, ArrayList<Entity> targets, Boolean actionPhase) {
+        calculateAbilityDamages();
         return new BattleEffect(ability, targets, this, actionPhase);
     }
 
