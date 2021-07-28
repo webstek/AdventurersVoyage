@@ -25,7 +25,7 @@ public class PowerShot extends Ability {
     // EFFECT: sets the damage of the ability based on the entity that is using it
     public void refreshAbility(Entity entity) {
         getEntityStats(entity);
-        int damage = 5 * (entityStats.damage() + entityStats.getStat(3) + (entity.level() / 2) + 10);
+        int damage = (entityStats.damage() + entityStats.getStat(3) + (entity.level() / 2) + 10);
         // Note the d-20 roll is replaced by 10 damage as randomness is not implemented yet.
         statsEffect.set(1,5,damage);
     }
