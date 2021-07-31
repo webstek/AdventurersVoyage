@@ -3,17 +3,19 @@ package model;
 
 import model.items.Item;
 
+import java.util.Iterator;
+
 /**
  * A two dimensional array of fixed maximum size. Intended for use like ArrayList, but with rows and items. Using the
  * remove function will reorder the matrix such that the !null elements are arranged right to left, top to bottom.
  */
 
-public class ItemMatrix {
+public class ItemMatrix implements Iterable<Item> {
     protected Object[][] matrixData;
     protected int length = 0;
-    private static int maxRows;
-    private static int maxColumns;
-    private static int maxLength;
+    private final int maxRows;
+    private final int maxColumns;
+    private final int maxLength;
 
     // EFFECTS: creates the 2D object array of rows number of rows, and columns number of columns
     public ItemMatrix(int rows, int columns) {
@@ -119,5 +121,23 @@ public class ItemMatrix {
             }
         }
         length = 0;
+    }
+
+    // EFFECTS: returns the iterator object that provides the hasNext and next methods. Enables use in foreach loops.
+    @Override
+    public Iterator<Item> iterator() {
+        return new Iterator<Item>() {
+            int position = 0;
+
+            @Override
+            public boolean hasNext() {
+                return position < length;
+            }
+
+            @Override
+            public Item next() {
+                return inPos(++position);
+            }
+        };
     }
 }

@@ -129,8 +129,7 @@ public class Battle {
     // MODIFIES: player
     // EFFECTS: gives the player the dead enemy's items and xp.
     private void collectDeadEnemyResources(Enemy enemy) {
-        for (int i = 1; i < enemy.getInventory().length(); i++) {
-            Item itemToTransfer = enemy.getInventory().inPos(i);
+        for (Item itemToTransfer : enemy.getInventory()) {
             playerInCombat.addToInventory(itemToTransfer);
             enemy.dropFromInventory(itemToTransfer);
         }
@@ -188,5 +187,15 @@ public class Battle {
     // EFFECTS: returns the effectsToRemove array list
     public ArrayList<BattleEffect> getEffectsToRemove() {
         return effectsToRemove;
+    }
+
+    // REQUIRES: all enemies must have died in combat
+    // MODIFIES: this, playerInCombat
+    // EFFECTS: resets the player's hp and mana to their max values
+    public void endBattle() {
+        for (BattleEffect btlEff : effectsToRemove) {
+            btlEff.remove();
+        }
+        playerInCombat.resetHealthAndMana();
     }
 }

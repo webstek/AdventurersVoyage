@@ -18,11 +18,10 @@ import model.races.Race;
 
 public abstract class CommonUI {
     static final String[] STAT_NAMES = new String[]{"Intelligence","Strength","Speed","Dexterity","Stealth"};
-    Scanner sc = new Scanner(System.in);
 
     // EFFECTS: returns the first word of input from the scanner that a user enters. Leave null prompt to skip it.
     public String getInput(String prompt) {
-        sc.reset();
+        Scanner sc = new Scanner(System.in);
         if (prompt != null) {
             System.out.println(prompt);
         }
@@ -31,7 +30,7 @@ public abstract class CommonUI {
 
     // EFFECTS: returns the full line from the scanner that a user enters. Leave null prompt to skip it.
     public String getFullInput(String prompt) {
-        sc.reset();
+        Scanner sc = new Scanner(System.in);
         if (prompt != null) {
             System.out.println(prompt);
         }
@@ -40,6 +39,7 @@ public abstract class CommonUI {
 
     // EFFECTS: returns a boolean after the user is prompted by the string parameter
     public boolean getBoolean(String prompt) throws UserInputException {
+        Scanner sc = new Scanner(System.in);
         if (prompt != null) {
             System.out.println(prompt);
         }
@@ -84,10 +84,9 @@ public abstract class CommonUI {
 
     // EFFECTS: returns a nicely formatted version of the bonus stats fields in a single string.
     public String displayBonus(Statistics bnsStats) {
-        // Width is 31 units across
-        StringBuilder formattedStats = new StringBuilder("|-----------------------------|");
+        StringBuilder formattedStats = new StringBuilder();
         for (int i = 0; i < 5; i++) {
-            formattedStats.append("\n| ").append(STAT_NAMES[i]).append(": +").append(bnsStats.in(1, i));
+            formattedStats.append("|  ").append(STAT_NAMES[i]).append(": +").append(bnsStats.in(1, i)).append("\n");
         }
         return formattedStats.toString();
     }
@@ -122,19 +121,18 @@ public abstract class CommonUI {
         return abilitySummary.toString();
     }
 
+    // TODO: change to includeStats only if there are non zero bonuses for the item.
     // EFFECTS: returns a well formatted summary of an Inventory.
     public String displayInventory(ItemMatrix inventory, boolean includeDescription, boolean includeStats) {
-        StringBuilder inventorySummary = new StringBuilder("| Inventory:\n|-----------------------------|\n");
-        for (int pos = 1; pos <= inventory.length(); pos++) {
-            Item item = inventory.inPos(pos);
-            inventorySummary.append("| ").append(item.name()).append(":\n");
-            if (includeDescription) {
-                inventorySummary.append("| ").append(item.description()).append("\n");
-            }
+        StringBuilder inventorySummary = new StringBuilder("| Inventory:\n|-----------------------------|");
+        for (Item item : inventory) {
+            inventorySummary.append("\n| --- ").append(item.name()).append(" ---\n");
             if (includeStats) {
-                inventorySummary.append(displayBonus(item.stats())).append("\n");
+                inventorySummary.append(displayBonus(item.stats()));
             }
-//            inventorySummary.append("|-----------------------------|\n");
+            if (includeDescription) {
+                inventorySummary.append("| ").append(item.description());
+            }
         }
         return inventorySummary.toString();
     }

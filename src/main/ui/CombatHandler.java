@@ -25,19 +25,19 @@ public class CombatHandler extends CommonUI {
         Collections.addAll(battleEnemies, enemies);
         System.out.println(description);
         this.info = new Battle(player, battleEnemies);
-        enterCombat();
+        System.out.println(" ---------------- Battle start! --------------- ");
+        doCombat();
+        postCombatSummary();
     }
 
     // MODIFIES: this
     // EFFECTS: main method for displaying what is happening in a battle
-    private void enterCombat() {
-        System.out.println(" ---------------- Battle start! --------------- ");
+    private void doCombat() {
         while (info.isInCombat()) {
-            // TODO debug Battle.startTurn() method
             System.out.println(info.startTurn());
             while (info.isTurnOngoing() && info.isInCombat()) {
                 Entity entityWithInitiative = info.getHighestCombatActionsEntity();
-                combatSummary();
+                inCombatSummary();
                 entityWithInitiative.refreshAbilities();
                 if (!entityWithInitiative.hostility()) {
                     System.out.println("\nYou have the initiative! Choose something to do!\n");
@@ -53,7 +53,14 @@ public class CombatHandler extends CommonUI {
             }
             info.endTurn();
         }
+        info.endBattle();
+    }
+
+    // EFFECTS: prints the battle complete message and displays the players stats and inventory.
+    private void postCombatSummary() {
         System.out.println(" -------------- Battle complete! -------------- ");
+        System.out.println("\n Your health and mana have been replenished.\n" + displayStats(player.stats(),true));
+        System.out.println(displayInventory(player.getInventory(), true, true));
     }
 
     // MODIFIES: this, effectsToApply
@@ -123,7 +130,7 @@ public class CombatHandler extends CommonUI {
     }
 
     // EFFECTS: returns a formatted string of the current Hp and Mana of all entities in combat
-    public void combatSummary() {
+    public void inCombatSummary() {
         StringBuilder combatSummary = new StringBuilder("| --------------------------- |");
         combatSummary.append("\n| ").append(player.name())
                 .append("\n|      Health: ").append(player.stats().in(0,5))

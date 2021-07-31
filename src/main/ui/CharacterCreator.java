@@ -8,6 +8,7 @@ import model.exceptions.UserInputException;
 
 public class CharacterCreator extends CommonUI {
     private Player playerField;
+    boolean nameConfirmed = false;
     boolean raceConfirmed = false;
     boolean professionConfirmed = false;
 
@@ -21,7 +22,7 @@ public class CharacterCreator extends CommonUI {
     // EFFECTS: loops until the user has confirmed their race and profession. modifies playerField, setting its starting
     //          name, stats, race, profession, inventory, (all fields).
     private void characterCreation() {
-        playerField = new Player(getFullInput("What might your name be, oh adventurous one?"));
+        nameSelection(getFullInput("What might you wish to be referred to as, adventurous one?"));
         System.out.println("The currently playable races and professions are: \n");
         while (!raceConfirmed || !professionConfirmed) {
             System.out.println(arrangeRacesAndProfessions());
@@ -32,6 +33,29 @@ public class CharacterCreator extends CommonUI {
         System.out.println("And now, " + playerField.name() + ", you set off on your journey with... ");
         System.out.println(displayStats(playerField.stats(), true));
         System.out.println(displayInventory(playerField.getInventory(), true, true));
+    }
+
+    // MODIFIES: this
+    // EFFECTS: sets the name field of the character creator and sets the playerField to a new player with correct name.
+    private void nameSelection(String selection) {
+        confirmName(selection);
+        if (nameConfirmed) {
+            playerField = new Player(selection);
+        } else {
+            nameSelection(getFullInput("Way to be indecisive. Jeez, so what's it going to be then?"));
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: queries the user if they want to confirm the name of their character.
+    private void confirmName(String selection) {
+        try {
+            nameConfirmed = getBoolean("Well then, are you CERTAIN you wish to be called \"" + selection.toUpperCase()
+                        + "\" by everyone? [Yes]/[No]");
+        } catch (UserInputException e) {
+            System.out.println(e.getMessage());
+            confirmName(selection);
+        }
     }
 
     // MODIFIES: this

@@ -21,7 +21,7 @@ public abstract class Entity {
     protected Statistics stats = new Statistics();
     protected Race race;
     protected Profession profession;
-    protected ItemMatrix inventory = new ItemMatrix(3, 6);
+    protected ItemMatrix inventory;
     protected boolean isHostile = false;
     protected String name;
     protected int combatActions;
@@ -47,8 +47,10 @@ public abstract class Entity {
     // MODIFIES: this
     // EFFECTS: sets the race field of the player by a string argument.
     public void setRace(Race race) {
-        for (int i = 0; i < stats.getMaxColumns(); i++) {
-            this.stats.clear(0,i);
+        if (this.race != null) {
+            for (int i = 0; i < stats.getMaxColumns(); i++) {
+                this.stats.clear(0, i);
+            }
         }
         this.race = race;
         this.stats.add(race.stats());
@@ -57,8 +59,10 @@ public abstract class Entity {
     // MODIFIES: this
     // EFFECTS: sets the profession field of the player by a string argument.
     public void setProfession(Profession prof) {
-        for (int i = 0; i < stats.getMaxColumns(); i++) {
-            this.stats.clear(1,i);
+        if (this.profession != null) {
+            for (int i = 0; i < stats.getMaxColumns(); i++) {
+                this.stats.clear(1, i);
+            }
         }
         this.profession = prof;
         this.stats.add(prof.stats());
@@ -209,5 +213,19 @@ public abstract class Entity {
     // EFFECTS: returns the amount of xp the entity has
     public int xp() {
         return xp;
+    }
+
+    // REQUIRES: race and profession to be set
+    // MODIFIES: this
+    // EFFECTS: resets the character's health and mana to it's maximum
+    public void resetHealthAndMana() {
+        for (int i = 5; i <= 6; i++) {
+            stats.clear(0, i);
+            stats.add(0, i, this.race.stats().in(0, i));
+            stats.add(0, i, this.profession.stats().in(0, i));
+            for (Item item : inventory) {
+                stats.add(0, i, item.stats().in(0, i));
+            }
+        }
     }
 }

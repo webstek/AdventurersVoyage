@@ -16,11 +16,12 @@ public class SlugBomb extends Ability {
         getEntityStats(caveSlug);
     }
 
-    // EFFECTS: takes a wait object and produces a clone of it
+    // EFFECTS: takes a SlugBomb object and produces a clone of it
     public SlugBomb(SlugBomb ability) {
         this.name = ability.name;
         this.description = ability.description;
         this.combatAction = ability.combatAction;
+        this.turnDuration = ability.turnDuration;
         this.statsEffect = ability.statsEffect.clone();
     }
 

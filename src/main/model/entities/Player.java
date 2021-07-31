@@ -1,5 +1,6 @@
 package model.entities;
 
+import model.ItemMatrix;
 import model.abilities.Slap;
 import model.abilities.Wait;
 
@@ -13,6 +14,7 @@ public class Player extends Entity {
     public Player(String name) {
         this.name = name;
         this.gold = 50;
+        this.inventory = new ItemMatrix(3, 6);
     }
 
     // MODIFIES: this
