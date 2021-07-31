@@ -1,12 +1,14 @@
 package ui;
 
 import model.entities.*;
+import org.json.JSONObject;
+import persistence.Writable;
 
 /**
  * AdventurerVoyageApp handles the story and calling the appropriate ui handler for the story event happening.
  */
 
-public class AdventurerVoyageApp {
+public class AdventurerVoyageApp implements Writable {
     private static Player PLAYER;
     private int adventureNumber = 0;
 
@@ -31,7 +33,7 @@ public class AdventurerVoyageApp {
                 + "you are capable enough to \nbe an Adventurer, there is a test you must pass. And that test"
                 + " is to defeat the opponent in front of you!";
         new CombatHandler(PLAYER, new Enemy[]{new CaveSlug()}, dscrpt1);
-        System.out.println("Congratulations, you have just slapped a cave slug to death! Not the first thing you "
+        System.out.println("\nCongratulations, you have just slapped a cave slug to death! Not the first \nthing you "
                 + "think of doing when you wake up, but it was fun nonetheless.");
 
         adventureNumber++;
@@ -43,6 +45,11 @@ public class AdventurerVoyageApp {
     // EFFECTS: queries the user to choose if they want to load save data from the hard drive and does so if they wish.
     private void loadFromSaveOption() {
         // Stub
+    }
+
+    // EFFECTS: writes this object to a Json file, enabling game saves.
+    public JSONObject toJson() {
+        return null;
     }
 }
 

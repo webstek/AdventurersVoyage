@@ -20,6 +20,7 @@ public class BattleEffect {
     private int combatActionCost;
     private ArrayList<Entity> targets;
     private Entity user;
+    private boolean typeStatsChange;
     private boolean applyAtEndOfActionPhase;
     private boolean applied = false;
 
@@ -29,18 +30,13 @@ public class BattleEffect {
         this.targets = targets;
         this.user = user;
         this.statsEffect = ability.getStatsEffect();
+        this.typeStatsChange = statsEffect.areNonZeroTypeStats();
         this.name = ability.name();
         this.turnsRemaining = ability.getTurnDuration();
         this.damagePerTurn = ability.damagePerTurn();
         this.initDamage = ability.getStatsEffect().damage();
         this.manaCost = ability.getStatsEffect().in(0,6);
         this.combatActionCost = ability.caCost();
-    }
-
-    // MODIFIES: this
-    // EFFECTS: sets the applyDuringActionPhase field.
-    public void setApplyAtEndOfActionPhase(boolean bool) {
-        this.applyAtEndOfActionPhase = bool;
     }
 
     // MODIFIES: user, targets;
@@ -62,11 +58,13 @@ public class BattleEffect {
                 happened.append(target.name()).append(" took ").append(damagePerTurn)
                         .append("dmg from ").append(name).append("! ");
             }
+            if (typeStatsChange && !applied) {
+                happened.append(target.name()).append(" had its stats reduced by ").append(name).append("! ");
+            }
             if (!applied) {
                 target.stats().add(statsEffect);
                 applied = true;
             }
-            target.stats().checkForNegativeStats();
         }
         return happened.toString();
     }

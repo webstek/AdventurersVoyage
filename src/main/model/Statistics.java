@@ -121,6 +121,18 @@ public class Statistics implements Cloneable {
         }
     }
 
+    // EFFECTS: returns true if any of the typeStat positions are non-zero
+    public boolean areNonZeroTypeStats() {
+        for (int i = 0; i < maxRows; i++) {
+            for (int j = 0; j < 5; j++) {
+                if (matrixData[i][j] != 0) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     // EFFECTS: returns the maxRows field
     public int getMaxRows() {
         return maxRows;

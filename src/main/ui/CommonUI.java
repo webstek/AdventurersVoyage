@@ -123,11 +123,11 @@ public abstract class CommonUI {
 
     // TODO: change to includeStats only if there are non zero bonuses for the item.
     // EFFECTS: returns a well formatted summary of an Inventory.
-    public String displayInventory(ItemMatrix inventory, boolean includeDescription, boolean includeStats) {
+    public String displayInventory(ItemMatrix inventory, boolean includeDescription) {
         StringBuilder inventorySummary = new StringBuilder("| Inventory:\n|-----------------------------|");
         for (Item item : inventory) {
             inventorySummary.append("\n| --- ").append(item.name()).append(" ---\n");
-            if (includeStats) {
+            if (item.stats().areNonZeroTypeStats()) {
                 inventorySummary.append(displayBonus(item.stats()));
             }
             if (includeDescription) {

@@ -60,7 +60,7 @@ public class CombatHandler extends CommonUI {
     private void postCombatSummary() {
         System.out.println(" -------------- Battle complete! -------------- ");
         System.out.println("\n Your health and mana have been replenished.\n" + displayStats(player.stats(),true));
-        System.out.println(displayInventory(player.getInventory(), true, true));
+        System.out.println(displayInventory(player.getInventory(), true));
     }
 
     // MODIFIES: this, effectsToApply

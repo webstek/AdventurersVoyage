@@ -3,13 +3,15 @@ package model.entities;
 import model.ItemMatrix;
 import model.abilities.Slap;
 import model.abilities.Wait;
+import org.json.JSONObject;
+import persistence.Writable;
 
 /**
  * Represents the user's player/adventurer. Players have an extra field that is their level. Increasing level applies
  * lvlUpStats and for some players will cause unique effects.
  */
 
-public class Player extends Entity {
+public class Player extends Entity implements Writable {
     // EFFECTS: constructs a base player with a name and base starting gold of 50.
     public Player(String name) {
         this.name = name;
@@ -36,5 +38,10 @@ public class Player extends Entity {
             return true;
         }
         return false;
+    }
+
+    // EFFECTS: writes this object to a Json file, persisting the player data of the object.
+    public JSONObject toJson() {
+        return null;
     }
 }

@@ -39,7 +39,7 @@ public class CharacterCreator extends CommonUI {
         }
         System.out.println("And now, " + playerField.name() + ", you set off on your journey with... ");
         System.out.println(displayStats(playerField.stats(), true));
-        System.out.println(displayInventory(playerField.getInventory(), true, true));
+        System.out.println(displayInventory(playerField.getInventory(), true));
     }
 
     // MODIFIES: this
