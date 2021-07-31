@@ -14,3 +14,5 @@
 - As a user, I want to be able to see what stats races and professions have before I choose one.
 - As a user, I want to choose as race and profession to play as.
 - As a user, I want to enage in combat.
+- As a user, I want to be prompted to load a save file when I start the game.
+- As a user, I want to know when my game is being saved.
