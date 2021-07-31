@@ -6,6 +6,13 @@ import model.races.*;
 import model.professions.*;
 import model.exceptions.UserInputException;
 
+/**
+ * Prompts the user to create a character, allowing them to choose a race or class, which displays more info about them
+ * and asks for confirmation. The characterCreation() method will loop until all confirmation fields are true.
+ */
+
+// TODO: add more races and professions once data persistence is implemented.
+
 public class CharacterCreator extends CommonUI {
     private Player playerField;
     boolean nameConfirmed = false;
