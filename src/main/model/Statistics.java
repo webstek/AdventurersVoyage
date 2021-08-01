@@ -1,6 +1,9 @@
 package model;
 
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 /**
  * Representation of all statistics for the game. The following table represents which values are stored where:
  *  |                                TypeStatistics                                  | HealthStatistics  |
@@ -152,5 +155,17 @@ public class Statistics implements Cloneable {
     // EFFECTS: returns the damage value in the statistic object
     public int damage() {
         return this.in(1,5);
+    }
+
+    // EFFECTS: represents the Statistics object in a Json Array
+    public JSONArray toJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        for (int i = 0; i < maxRows; i++) {
+            for (int j = 0; j < maxColumns; j++) {
+                jsonArray.put(matrixData[i][j]);
+            }
+        }
+        return jsonArray;
     }
 }

@@ -40,8 +40,18 @@ public class Player extends Entity implements Writable {
         return false;
     }
 
-    // EFFECTS: writes this object to a Json file, persisting the player data of the object.
+    // EFFECTS: converts player to a Json object, enabling the saving of the player data.
     public JSONObject toJson() {
-        return null;
+        JSONObject playerJson = new JSONObject();
+
+        playerJson.put("stats",this.stats.toJson());
+        playerJson.put("race",this.race.getSpecies());
+        playerJson.put("profession",this.profession.getTitle());
+        playerJson.put("inventory",this.inventory.toJson());
+        playerJson.put("name",this.name);
+        playerJson.put("xp",this.xp);
+        playerJson.put("gold",this.gold);
+
+        return playerJson;
     }
 }

@@ -2,7 +2,9 @@ package model;
 
 
 import model.items.Item;
-
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
 import java.util.Iterator;
 
 /**
@@ -139,5 +141,15 @@ public class ItemMatrix implements Iterable<Item> {
                 return inPos(++position);
             }
         };
+    }
+
+    // EFFECTS: represents the item matrix object in a JsonArray
+    public JSONArray toJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        for (Item item : this) {
+            jsonArray.put(item.toJson());
+        }
+        return jsonArray;
     }
 }

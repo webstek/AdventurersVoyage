@@ -49,7 +49,10 @@ public class AdventurerVoyageApp implements Writable {
 
     // EFFECTS: writes this object to a Json file, enabling game saves.
     public JSONObject toJson() {
-        return null;
+        JSONObject json = new JSONObject();
+        json.put("adventureNumber", adventureNumber);
+        json.put("player", PLAYER.toJson());
+        return json;
     }
 }
 
