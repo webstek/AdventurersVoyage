@@ -29,7 +29,7 @@ public class CharacterCreator extends CommonUI {
     // EFFECTS: loops until the user has confirmed their race and profession. modifies playerField, setting its starting
     //          name, stats, race, profession, inventory, (all fields).
     private void characterCreation() {
-        nameSelection(getFullInput("What might you wish to be referred to as, adventurous one?"));
+        nameSelection(getFullInput("\nWhat might you wish to be referred to as, adventurous one?"));
         System.out.println("The currently playable races and professions are: \n");
         while (!raceConfirmed || !professionConfirmed) {
             System.out.println(arrangeRacesAndProfessions());
@@ -86,6 +86,7 @@ public class CharacterCreator extends CommonUI {
         if ("RANGER".equalsIgnoreCase(selection)) {
             Ranger ranger = new Ranger();
             getProfessionInfo(ranger);
+            System.out.println();
             confirmProfession(ranger);
             if (professionConfirmed) {
                 System.out.println("Sneaky sneaky you go through the forest, go get some yummy dinner for yourself.");
@@ -148,7 +149,7 @@ public class CharacterCreator extends CommonUI {
 
     // EFFECTS: prints the Title: title, description, list of abilities, and bonusStats of the requested profession
     public void getProfessionInfo(Profession prof) {
-        System.out.println("|-----------------------------|\n| Profession Bonuses:         |\n"
+        System.out.println("| Profession Bonuses -------- |"
                 + displayBonus(prof.stats()));
         System.out.println(displayAbilities(prof.getAbilities(), true,false));
     }

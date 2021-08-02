@@ -8,7 +8,7 @@ public class PowerShot extends Ability {
     //          Used in character creation to display the information about the ability.
     public PowerShot() {
         this.name = "Power Shot";
-        this.description = "Shoot an arrow and deal damage equal to (weapon dmg + dex + level/2 + d-20 roll)";
+        this.description = "Shoot an arrow and deal damage equal to (weapon dmg + dex + level/2 + 10)";
         this.combatAction = 3;
         setStatsEffect();
     }

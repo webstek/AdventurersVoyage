@@ -1,5 +1,6 @@
 package model.items;
 
+import model.InstanceFactory;
 import model.Statistics;
 import org.json.JSONObject;
 import persistence.Writable;
@@ -39,17 +40,5 @@ public abstract class Item implements Writable {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("name",this.name.replace(" ",""));
         return jsonObject;
-    }
-
-    // EFFECTS: returns an instance of the desired item from a string name of an item class already defined.
-    static Object itemInstanceFromString(String className) {
-        Object itemInstance = null;
-        try {
-            Class<?> classPlaceHolder = Class.forName(className);
-            itemInstance = classPlaceHolder.newInstance();
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        return itemInstance;
     }
 }

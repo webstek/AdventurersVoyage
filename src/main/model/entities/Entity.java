@@ -215,6 +215,23 @@ public abstract class Entity {
         return xp;
     }
 
+    // MODIFIES: this
+    // EFFECTS: spends the amount of gold specified in the argument if the player has enough; throws ResourceException
+    //          if there isn't enough money.
+    public void spend(int amount) throws InsufficientResourceException {
+        if (gold >= amount) {
+            gold -= amount;
+        } else {
+            throw new InsufficientResourceException("Not enough gold.");
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: adds the amount of gold specified in the argument to the gold field.
+    public void deposit(int amount) {
+        gold += amount;
+    }
+
     // REQUIRES: race and profession to be set
     // MODIFIES: this
     // EFFECTS: resets the character's health and mana to it's maximum

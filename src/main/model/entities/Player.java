@@ -15,7 +15,6 @@ public class Player extends Entity implements Writable {
     // EFFECTS: constructs a base player with a name and base starting gold of 50.
     public Player(String name) {
         this.name = name;
-        this.gold = 50;
         this.inventory = new ItemMatrix(3, 6);
     }
 

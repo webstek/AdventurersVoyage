@@ -1,7 +1,9 @@
 package model.professions;
 
+import model.InstanceFactory;
 import model.Statistics;
 import model.abilities.Ability;
+
 import java.util.ArrayList;
 
 /**

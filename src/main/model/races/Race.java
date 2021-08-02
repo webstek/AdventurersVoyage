@@ -1,12 +1,12 @@
 package model.races;
 
+import model.InstanceFactory;
 import model.Statistics;
 
 /**
  * Abstract class that all race subclasses are based upon. The race class contains a species name, description, list of
  * strengths, list of weaknesses, baseStats
  */
-
 
 public abstract class Race {
     protected String species = null;

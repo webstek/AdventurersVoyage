@@ -6,6 +6,7 @@ import java.util.Scanner;
 import model.Statistics;
 import model.ItemMatrix;
 import model.entities.Entity;
+import model.entities.Player;
 import model.items.Item;
 import model.abilities.Ability;
 import model.exceptions.UserInputException;
@@ -16,7 +17,7 @@ import model.races.Race;
  * Abstract class that holds many common conversions from the model classes to strings.
  */
 
-public abstract class CommonUI {
+public class CommonUI {
     static final String[] STAT_NAMES = new String[]{"Intelligence","Strength","Speed","Dexterity","Stealth"};
 
     // EFFECTS: returns the first word of input from the scanner that a user enters. Leave null prompt to skip it.
@@ -58,16 +59,13 @@ public abstract class CommonUI {
     // EFFECTS: returns a nicely formatted version of all the Stats fields in a single string.
     public String displayStats(Statistics stats, boolean withHealth) {
         // Width is 31 units across
-        StringBuilder formattedStats = new StringBuilder("|-----------------------------|\n"
-                + "| Statistics:                 |\n|-----------------------------|\n");
+        StringBuilder formattedStats = new StringBuilder("\n| Statistics: --------------- |\n");
         for (int i = 0; i < 5; i++) {
             formattedStats.append("| ").append(STAT_NAMES[i]).append(": ").append(stats.in(0, i))
                     .append(" + ").append(stats.in(1, i)).append("\n");
         }
-        formattedStats.append("|-----------------------------|");
         if (withHealth) {
-            formattedStats.append("\n| Health: ").append(stats.in(0, 5)).append("\n| Mana: ").append(stats.in(0, 6))
-            .append("\n|-----------------------------|");
+            formattedStats.append("| Health: ").append(stats.in(0, 5)).append("\n| Mana: ").append(stats.in(0, 6));
         }
         return formattedStats.toString();
     }
@@ -86,7 +84,7 @@ public abstract class CommonUI {
     public String displayBonus(Statistics bnsStats) {
         StringBuilder formattedStats = new StringBuilder();
         for (int i = 0; i < 5; i++) {
-            formattedStats.append("|  ").append(STAT_NAMES[i]).append(": +").append(bnsStats.in(1, i)).append("\n");
+            formattedStats.append("\n").append("|  ").append(STAT_NAMES[i]).append(": +").append(bnsStats.in(1, i));
         }
         return formattedStats.toString();
     }
@@ -99,18 +97,16 @@ public abstract class CommonUI {
 
     // EFFECTS: returns a nicely formatted version of all the abilities of a profession in a single string.
     public String displayAbilities(ArrayList<Ability> abilities, boolean includeDescription, boolean includeDamage) {
-        StringBuilder abilitySummary = new StringBuilder("|-----------------------------|\n"
-                + "| Abilities:                  |\n");
+        StringBuilder abilitySummary = new StringBuilder("\n| Abilities: ---------------- |");
         for (Ability ability : abilities) {
-            abilitySummary.append(displayAbility(ability, includeDescription, includeDamage)).append("\n");
+            abilitySummary.append(displayAbility(ability, includeDescription, includeDamage));
         }
-        abilitySummary.append("|-----------------------------|");
         return abilitySummary.toString();
     }
 
     // EFFECTS: returns a well formatted summary of a given ability.
     public String displayAbility(Ability a, boolean includeDescription, boolean includeDamage) {
-        StringBuilder abilitySummary = new StringBuilder("|-----------------------------|\n" + "| " + a.name() + ": "
+        StringBuilder abilitySummary = new StringBuilder("\n| --- " + a.name() + " ---\n| "
                 + a.caCost() + "ca, " + -a.getStatsEffect().in(0,6) + "mp");
         if (includeDamage) {
             abilitySummary.append(", ").append(a.getStatsEffect().damage()).append("dmg");
@@ -124,7 +120,7 @@ public abstract class CommonUI {
     // TODO: change to includeStats only if there are non zero bonuses for the item.
     // EFFECTS: returns a well formatted summary of an Inventory.
     public String displayInventory(ItemMatrix inventory, boolean includeDescription) {
-        StringBuilder inventorySummary = new StringBuilder("| Inventory:\n|-----------------------------|");
+        StringBuilder inventorySummary = new StringBuilder("\n| Inventory: ---------------- |");
         for (Item item : inventory) {
             inventorySummary.append("\n| --- ").append(item.name()).append(" ---\n");
             if (item.stats().areNonZeroTypeStats()) {
@@ -146,4 +142,10 @@ public abstract class CommonUI {
         return listSummary.toString();
     }
 
+    public String playerSummary(Player player) {
+        return "\n| Player Summary ------------ |\n| Name: " + player.name()
+                + "\n" + displayStats(player.stats(), true)
+                + "\n" + displayAbilities(player.abilities(), true, true)
+                + "\n" + displayInventory(player.getInventory(), true);
+    }
 }
