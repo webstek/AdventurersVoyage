@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 public class JsonReaderTest extends GeneralTestMethods {
 
+    // EFFECTS: checks to determine if the json reader is correctly throwing an IOException when it's missing its file.
     @Test
     public void testReaderNonExistentFile() {
         JsonReader reader = new JsonReader("./data/noSuchFile.json");
@@ -25,6 +26,7 @@ public class JsonReaderTest extends GeneralTestMethods {
         }
     }
 
+    // EFFECTS: checks to determine if the Json Reader creates the proper gameState for a given Json file.
     @Test
     public void testReaderGeneralGameState() {
         JsonReader reader = new JsonReader("./data/testReaderGeneralGameState.json");

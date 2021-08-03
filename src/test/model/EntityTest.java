@@ -109,7 +109,7 @@ public class EntityTest {
 
     @Test
     public void enemyGettingLastAbilityTest() {
-        Enemy caveSlug = new CaveSlug();
+        Enemy caveSlug = new CaveSlug(null);
         assertEquals("Slug Bomb", caveSlug.getLastUsableAbility().name());
         caveSlug.useCombatActions(1);
         caveSlug.stats().sub(0,6,30);

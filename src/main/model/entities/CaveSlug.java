@@ -5,6 +5,7 @@ import model.Statistics;
 import model.abilities.Slap;
 import model.abilities.SlugBomb;
 import model.items.BirchBow;
+import model.items.Item;
 
 
 /**
@@ -13,10 +14,12 @@ import model.items.BirchBow;
 
 public class CaveSlug extends Enemy {
     // EFFECTS: creates the Cave Slug with the correct field values
-    public CaveSlug() {
+    public CaveSlug(Item item) {
         this.stats = new Statistics(new int[][]{{1,4,2,2,4,200,50},{0,0,0,0,0,15,0}});
         this.inventory = new ItemMatrix(1,1);
-        this.addToInventory(new BirchBow());
+        if (item != null) {
+            this.addToInventory(item);
+        }
         setHostility(true);
         this.name = "Cave Slug";
         this.combatActions = 2;

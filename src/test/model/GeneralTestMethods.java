@@ -29,6 +29,9 @@ public class GeneralTestMethods {
         return true;
     }
 
+    // EFFECTS: runs the JUnit tests to determine if the player object passed in has the matching values to those in the
+    //          other arguments. For items, races, and professions, only the name must match since all other values are
+    //          tied to the object instantiation.
     protected void checkPlayer(String name, Statistics stats, ItemMatrix inventory, Race race, Profession profession
                                ,int gold, int xp, Player player) {
         assertEquals(name, player.name());

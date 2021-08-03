@@ -17,14 +17,11 @@
             2,
             4,
             2,
-            15,
+            0,
             0
         ],
-        "name": "Gicko",
+        "name": "marine Iguana",
         "xp": 10,
-        "inventory": [
-            {"name": "FluffyHat"},
-            {"name": "BirchBow"}
-        ]
+        "inventory": [{"name": "FluffyHat"}]
     }
 }

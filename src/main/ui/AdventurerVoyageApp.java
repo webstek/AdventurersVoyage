@@ -3,6 +3,7 @@ package ui;
 import model.GameState;
 import model.entities.*;
 import model.exceptions.UserInputException;
+import model.items.BirchBow;
 import org.json.JSONObject;
 import persistence.JsonReader;
 import persistence.JsonWriter;
@@ -19,14 +20,14 @@ public class AdventurerVoyageApp implements Writable {
     private static final String JSON_FILE_PATH = "./data/gameState.json";
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
-    private static GameState gameState;
+    private static GameState gs;
 
     // MODIFIES: this
     // EFFECTS: calls the main method that tell the adventure story
     public AdventurerVoyageApp() {
         jsonWriter = new JsonWriter(JSON_FILE_PATH);
         jsonReader = new JsonReader(JSON_FILE_PATH);
-        gameState = new GameState(0,null);
+        gs = new GameState(0,null);
         introduction();
 
         System.out.println("\n\nThanks for playing! Much, much, MUCH, more content is in the works!  :O");
@@ -36,7 +37,7 @@ public class AdventurerVoyageApp implements Writable {
     private void introduction() {
         System.out.println("Welcome to Adventurer's Voyage!\n-------------------------------");
         optionalLoadFromSave();
-        gotoAdventure(gameState.adventureNumber());
+        gotoAdventure(gs.adventureNumber());
     }
 
     // EFFECTS: selects the appropriate goAdventuring method for the current place of the user in the story
@@ -44,7 +45,7 @@ public class AdventurerVoyageApp implements Writable {
         if (adventureNumber == 0) {
             goAdventuring0();
         } else if (adventureNumber == 1) {
-            System.out.println("\nYou will now do your first actual quest! Although it's tbd as of current.");
+            goAdventuring1();
         }
     }
 
@@ -55,7 +56,7 @@ public class AdventurerVoyageApp implements Writable {
                 + "\nmostly as I haven't written all of them, and the monsters are unknown since I you haven't faced"
                 + "\nany yet. HAH! But this is all besides the point. For now, you must decide who you really are....");
         CharacterCreator cc = new CharacterCreator();
-        gameState.setPlayer(cc.createdPlayer());
+        gs.setPlayer(cc.createdPlayer());
         System.out.println("\nNow, you must learn how to do combat! An exciting process, although somewhat tedious if"
                 + "\nI make your damage values too low. For now, the essentials. Battles are made up of turns, which"
                 + "\nend when all entities in battle have zero combat actions (ca). When an entity has the highest ca,"
@@ -66,20 +67,31 @@ public class AdventurerVoyageApp implements Writable {
                 + "\nevery adventure story needs a training arc, and so this one will be yours. Just to make sure "
                 + "\nyou are capable enough to be an Adventurer, and not some person trying to break my game, there"
                 + "\nshall be a test. Defeat the opponent in front of you!";
-        new CombatHandler(gameState.player(), new Enemy[]{new CaveSlug()}, dscrpt1);
+        new CombatHandler(gs.player(), new Enemy[]{new CaveSlug(null)}, dscrpt1);
         System.out.println("\nCongratulations, you have just slapped a cave slug to death! Not the first \nthing you "
                 + "think of doing when you wake up, but it was fun nonetheless.");
-        gameState.completeAnAdventure();
+        gs.completeAnAdventure();
         saveGameState();
+        gotoAdventure(gs.adventureNumber());
+    }
 
-        gotoAdventure(gameState.adventureNumber());
+    // EFFECTS: the first real quest of the game.
+    private void goAdventuring1() {
+        System.out.println("\n\nAlright " + gs.player().name() + ", it's time for you to begin your voyage of epic"
+                + "\nproportions, well, let's hope for your sake that it's long. Until we meet again adventurer!");
+        System.out.println("\n\nYou have just finished eating a yummy breakfast. Including french toast, although"
+                + "\nwithout the syrup. The previous evening, you received a request from the local bowyer to"
+                + "\nbring them a Birch Bow. Knowing that the Cave Slugs to the south frequently have stashes of"
+                + "\nBirch bows, you decide to go hunt one down.");
+        String dscrpt1 = "\nIn the caves to the south, you find a Cave Slug, and it happens to have a Birch Bow!";
+        new CombatHandler(gs.player(), new Enemy[]{new CaveSlug(new BirchBow())}, dscrpt1);
     }
 
     // EFFECTS: saves the gameState to file
     private void saveGameState() {
         try {
             jsonWriter.open();
-            jsonWriter.write(gameState);
+            jsonWriter.write(gs);
             jsonWriter.close();
             System.out.println("\nYour game has been saved.");
         } catch (FileNotFoundException e) {
@@ -90,7 +102,7 @@ public class AdventurerVoyageApp implements Writable {
     // EFFECTS: saves the game state to the save file
     public void loadGameState() {
         try {
-            gameState = jsonReader.read();
+            gs = jsonReader.read();
             System.out.println("Loaded game from save file.");
         } catch (IOException e) {
             System.out.println("Unable to read game-state from file.");
@@ -111,13 +123,13 @@ public class AdventurerVoyageApp implements Writable {
         }
         if (isLoadingRequired) {
             loadGameState();
-            System.out.println(commonUI.playerSummary(gameState.player()));
+            System.out.println(commonUI.playerSummary(gs.player()));
         }
     }
 
     // EFFECTS: writes this object to a Json file, enabling game saves.
     public JSONObject toJson() {
-        return gameState.toJson();
+        return gs.toJson();
     }
 }
 

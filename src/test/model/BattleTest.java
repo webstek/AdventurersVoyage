@@ -21,7 +21,7 @@ public class BattleTest {
         player = new Player("MarineIguana");
         player.setRace(new Human());
         player.setProfession(new Ranger());
-        enemies.add(new CaveSlug());
+        enemies.add(new CaveSlug(null));
         battleTest = new Battle(player, enemies);
     }
 

@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 public class JsonWriterTest extends GeneralTestMethods {
 
+    // EFFECTS: checks to determine if the Json Writer throws an exception for an illegal file name.
     @Test
     public void testWriterInvalidFile() {
         try {
@@ -29,6 +30,8 @@ public class JsonWriterTest extends GeneralTestMethods {
         }
     }
 
+    // EFFECTS: checks to determine if the Json writer is correctly writing a recoverable gameState from a known set
+    //          of instances.
     @Test
     public void testWriterGeneralGameState() {
         try {
