@@ -100,6 +100,16 @@ public class ItemMatrix implements Iterable<Item> {
         return new int[]{(p - 1) / maxColumns,p - 1 - (((p - 1) / maxColumns) * maxColumns)};
     }
 
+    // EFFECTS: returns true if an object of the same item subclass is in the item matrix. If not, returns false.
+    public boolean contains(Item lookingFor) {
+        for (Item item : this) {
+            if (item.name().equals(lookingFor.name())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     // EFFECTS: converts a set of indices to a single position reference
     private int toPos(int i, int j) {
         return (j + 1) + (maxColumns * i);

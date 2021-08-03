@@ -1,0 +1,30 @@
+{
+    "adventureNumber": 3,
+    "player": {
+        "profession": "Ranger",
+        "gold": 100,
+        "race": "Human",
+        "stats": [
+            7,
+            5,
+            6,
+            8,
+            7,
+            325,
+            100,
+            0,
+            0,
+            2,
+            4,
+            2,
+            15,
+            0
+        ],
+        "name": "Marine Iguana",
+        "xp": 50,
+        "inventory": [
+            {"name": "FluffyHat"},
+            {"name": "BirchBow"}
+        ]
+    }
+}

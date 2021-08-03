@@ -215,6 +215,11 @@ public abstract class Entity {
         return xp;
     }
 
+    // EFFECTS: returns the level number of the player
+    public int getLevel() {
+        return level;
+    }
+
     // MODIFIES: this
     // EFFECTS: spends the amount of gold specified in the argument if the player has enough; throws ResourceException
     //          if there isn't enough money.
@@ -230,6 +235,11 @@ public abstract class Entity {
     // EFFECTS: adds the amount of gold specified in the argument to the gold field.
     public void deposit(int amount) {
         gold += amount;
+    }
+
+    // EFFECTS: returns the amount of gold the player has
+    public int getGold() {
+        return gold;
     }
 
     // REQUIRES: race and profession to be set
