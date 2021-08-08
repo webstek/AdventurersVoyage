@@ -3,8 +3,7 @@ package model;
 
 import model.items.Item;
 import org.json.JSONArray;
-import org.json.JSONObject;
-import persistence.Writable;
+
 import java.util.Iterator;
 
 /**
@@ -90,9 +89,15 @@ public class ItemMatrix implements Iterable<Item> {
 
     // REQUIRES: all elements of the ItemMatrix to be type Item
     // EFFECTS: returns the item in ItemMatrix at pos
-    public Item inPos(int p) {
+    public Item in(int p) {
         int[] indices = toIndices(p);
         return (Item) matrixData[indices[0]][indices[1]];
+    }
+
+    // REQUIRES: all elements of the ItemMatrix to be type Item
+    // EFFECTS: returns the item in ItemMatrix at indices i, j.
+    public Item in(int i, int j) {
+        return (Item) matrixData[i][j];
     }
 
     // EFFECTS: converts the position reference to a set of matrix indices (int[2] = {i,j}) like so.
@@ -148,7 +153,7 @@ public class ItemMatrix implements Iterable<Item> {
 
             @Override
             public Item next() {
-                return inPos(++position);
+                return in(++position);
             }
         };
     }

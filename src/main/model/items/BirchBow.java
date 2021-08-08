@@ -2,6 +2,8 @@ package model.items;
 
 import model.Statistics;
 
+import javax.swing.*;
+
 /**
  * Birch Bow item, starting weapon of the ranger.
  */
@@ -11,6 +13,8 @@ public class BirchBow extends Item {
     public BirchBow() {
         this.name = "Birch Bow";
         this.description = "The basic starting bow of any aspiring ranger";
+        this.itemIcon = new ImageIcon(System.getProperty("user.dir") + DIR_SEP + "data" + DIR_SEP + "items" + DIR_SEP
+                + "birch bow.png");
         setItemStats();
     }
 

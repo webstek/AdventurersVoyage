@@ -92,9 +92,9 @@ public class EntityTest {
     public void addAndSubToInventoryTest() {
         Item fluffyHat = new FluffyHat();
         humanRangerPlayer.addToInventory(fluffyHat);
-        assertEquals(fluffyHat,humanRangerPlayer.getInventory().inPos(1));
+        assertEquals(fluffyHat,humanRangerPlayer.getInventory().in(1));
         humanRangerPlayer.dropFromInventory(fluffyHat);
-        assertNull(humanRangerPlayer.getInventory().inPos(1));
+        assertNull(humanRangerPlayer.getInventory().in(1));
     }
 
     @Test
@@ -103,8 +103,8 @@ public class EntityTest {
         Item groveBow = new BirchBow();
         humanRangerPlayer.addToInventory(fluffyHat);
         humanRangerPlayer.addToInventory(groveBow);
-        assertEquals(fluffyHat,humanRangerPlayer.getInventory().inPos(1));
-        assertEquals(groveBow,humanRangerPlayer.getInventory().inPos(2));
+        assertEquals(fluffyHat,humanRangerPlayer.getInventory().in(1));
+        assertEquals(groveBow,humanRangerPlayer.getInventory().in(2));
     }
 
     @Test

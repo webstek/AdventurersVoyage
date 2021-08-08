@@ -2,6 +2,8 @@ package model.items;
 
 import model.Statistics;
 
+import javax.swing.*;
+
 /**
  * Fluffy Hat item, given as a token of goodwill to every player for now.
  */
@@ -11,6 +13,8 @@ public class FluffyHat extends Item {
     public FluffyHat() {
         this.name = "Fluffy Hat";
         this.description = "A necessity for any determined adventurer.";
+        this.itemIcon = new ImageIcon(System.getProperty("user.dir") + DIR_SEP + "data" + DIR_SEP + "items" + DIR_SEP
+                + "fluffy hat.png");
         setItemStats();
     }
 
