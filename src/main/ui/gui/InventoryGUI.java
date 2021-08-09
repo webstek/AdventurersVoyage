@@ -13,6 +13,8 @@ public class InventoryGUI extends JPanel {
     private static final int XTR_Y = 25;
 
     private ItemMatrix inventory;
+    private TableModel itemIcons;
+    private JTable inventoryTable;
 
     // EFFECTS: sets the inventory field and calls the draw inventory method.
     public InventoryGUI(ItemMatrix inventory) {
@@ -21,9 +23,8 @@ public class InventoryGUI extends JPanel {
         setBounds(2 * AdvVoyGUI.getFrameWidth() / 3 - 1, AdvVoyGUI.getFrameHeight() / 2 - XTR_Y,
                 AdvVoyGUI.getFrameWidth() / 3, AdvVoyGUI.getFrameHeight() / 2 + XTR_Y);
         setBackground(BG_COLOR);
-        JLabel inventoryText = new JLabel();
-        inventoryText.setText("Inventory: ");
-        inventoryText.setHorizontalAlignment(SwingConstants.LEFT);
+
+        JLabel inventoryText = new JLabel("Inventory: ");
         inventoryText.setFont(new Font("Arial",Font.PLAIN,15));
         add(inventoryText);
 
@@ -32,8 +33,8 @@ public class InventoryGUI extends JPanel {
 
     // EFFECTS: draws the inventory as a JTable, and adds it to the InventoryGUI
     public void drawInventory() {
-        TableModel itemIcons = new InventoryTableModel(inventory);
-        JTable inventoryTable = new JTable(itemIcons);
+        itemIcons = new InventoryTableModel(inventory);
+        inventoryTable = new JTable(itemIcons);
         inventoryTable.setDefaultRenderer(ImageIcon.class, new ItemRenderer());
 
         inventoryTable.setPreferredSize(new Dimension(AdvVoyGUI.getFrameWidth() / 3 - 10,
@@ -41,7 +42,13 @@ public class InventoryGUI extends JPanel {
         inventoryTable.setRowHeight((AdvVoyGUI.getFrameHeight() / 2) / 4);
         inventoryTable.setBorder(BorderFactory.createLineBorder(LINE_COLOR));
 
-        this.add(inventoryTable);
+        add(inventoryTable,BorderLayout.EAST);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: resets the table model so that a tableChangeEvent is fired as the contents are updated.
+    public void refresh() {
+        itemIcons = new InventoryTableModel(inventory);
     }
 
     // Private renderer class to display inventory item icons

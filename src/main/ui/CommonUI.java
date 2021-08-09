@@ -12,6 +12,8 @@ import model.abilities.Ability;
 import model.exceptions.UserInputException;
 import model.races.Race;
 
+import javax.swing.*;
+
 
 /**
  * Abstract class that holds many common conversions from the model classes to strings.
@@ -147,5 +149,14 @@ public class CommonUI {
                 + "\n" + displayStats(player.stats(), true)
                 + "\n" + displayAbilities(player.abilities(), true, true)
                 + "\n" + displayInventory(player.getInventory(), true);
+    }
+
+    // MODIFIES: textOut
+    // EFFECTS: displays the String in the argument with \n creating a new line in the textOut box.
+    public void setTextOut(JLabel textOut, String str) {
+        textOut.setText("");
+        String formattedStr = str.replace("\n","<br>");
+        formattedStr = "<html>" + formattedStr + "</html>";
+        textOut.setText(formattedStr);
     }
 }

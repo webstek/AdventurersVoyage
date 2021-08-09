@@ -1,5 +1,6 @@
 {
-    "adventureNumber": 1,
+    "displayText": "Now, you must learn how to do combat! An exciting process, although somewhat tedious if I make your damage values too low. For now, the essentials. Battles are made up of turns, which end when all entities in battle have zero combat actions (ca). When an entity has the highest ca, it has the initiative, so they get to use an ability. After each turn, ca are reset for each entity, to their current total speed stat. The battle ends when all enemies are dead!\n \nThat's all on the essentials of battle folks.",
+    "adventureNumber": 0,
     "player": {
         "profession": "Ranger",
         "gold": 0,
@@ -10,7 +11,7 @@
             6,
             8,
             7,
-            325,
+            200,
             100,
             0,
             0,
@@ -20,8 +21,8 @@
             0,
             0
         ],
-        "name": "marine Iguana",
-        "xp": 10,
+        "name": "Appii",
+        "xp": 0,
         "inventory": [{"name": "FluffyHat"}]
     }
 }

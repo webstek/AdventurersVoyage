@@ -50,8 +50,9 @@ public class JsonReader {
     // EFFECTS: creates a gameState instance from JSON object and returns it
     private GameState parseGameState(JSONObject jsonObject) {
         int adventureNumber = jsonObject.getInt("adventureNumber");
+        String displayText = jsonObject.getString("displayText");
         Player player = parsePlayer(jsonObject);
-        return new GameState(adventureNumber,player);
+        return new GameState(displayText,adventureNumber,player);
     }
 
     // EFFECTS: creates a player instance from JSON object and returns it
@@ -61,14 +62,14 @@ public class JsonReader {
         InstanceFactory factory = new InstanceFactory();
 
         Player player = new Player(jsonPlayer.getString("name"));
-        Race race = factory.raceInstanceFromString(jsonPlayer.getString("race"));
+        Race race = factory.raceInstance(jsonPlayer.getString("race"));
         player.setRace(race);
-        Profession profession = factory.professionInstanceFromString(jsonPlayer.getString("profession"));
+        Profession profession = factory.professionInstance(jsonPlayer.getString("profession"));
         player.setProfession(profession);
 
         for (Object json : jsonInventory) {
             JSONObject jsonItem = (JSONObject) json;
-            player.addToInventory(factory.itemInstanceFromString(jsonItem.getString("name")));
+            player.addToInventory(factory.itemInstance(jsonItem.getString("name")));
         }
         player.receiveXp(jsonPlayer.getInt("xp"));
         player.tryLvlUp();

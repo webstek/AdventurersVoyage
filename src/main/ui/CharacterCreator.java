@@ -19,9 +19,12 @@ public class CharacterCreator extends CommonUI {
     boolean raceConfirmed = false;
     boolean professionConfirmed = false;
 
+    // EFFECTS: default constructor giving other classes access to the display methods here.
+    public CharacterCreator() {}
+
     // EFFECTS: starts a CharacterCreator object, which loops until the user has confirmed their race and profession.
     //          Creates a player object which has the correct starting stats and items before the constructor finishes.
-    public CharacterCreator() {
+    public CharacterCreator(Boolean withPrompts) {
         characterCreation();
     }
 
@@ -137,21 +140,19 @@ public class CharacterCreator extends CommonUI {
     }
 
     // EFFECTS: prints the Species, description, strengths and weaknesses, Stats, and lvlUpGains of the requested race
-    public void getRaceInfo(Race race) {
-        System.out.println("|-----------------------------|\n| " + race.getDescription()
+    public String getRaceInfo(Race race) {
+        return "| Race Attributes ------------|\n| " + race.getDescription()
                 + "\n|-----------------------------|\n| Strengths: "
                 + race.getStrengths() + "\n| Weaknesses: "
-                + race.getWeaknesses());
-        System.out.println(displayTypeStats(race.stats()) + "\n" + displayRaceHealthAndMana(race)
+                + race.getWeaknesses() + displayTypeStats(race.stats()) + "\n" + displayRaceHealthAndMana(race)
                 + "\n| With per level gains of:\n| " + race.getHpGain() + "Hp and " + race.getMpGain() + "Mp."
-                + "\n|-----------------------------|");
+                + "\n|-----------------------------|";
     }
 
     // EFFECTS: prints the Title: title, description, list of abilities, and bonusStats of the requested profession
-    public void getProfessionInfo(Profession prof) {
-        System.out.println("| Profession Bonuses -------- |"
-                + displayBonus(prof.stats()));
-        System.out.println(displayAbilities(prof.getAbilities(), true,false));
+    public String getProfessionInfo(Profession prof) {
+        return "| Profession Bonuses -------- |"
+                + displayBonus(prof.stats()) + displayAbilities(prof.getAbilities(), true,false);
     }
 
     // EFFECTS: returns the player field;

@@ -1,30 +1,32 @@
-package ui;
+package model.combat;
 
+import model.GameState;
 import model.abilities.Ability;
-import model.combat.*;
 import model.entities.*;
 import model.exceptions.InsufficientResourceException;
 import model.exceptions.UserInputException;
+import ui.CommonUI;
 
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * Called when a battle is necessary in the Story. Displays what's
+ * Called when a battle is necessary in the Story. Sends the appropriate response string for the input string
  */
 
 public class CombatHandler extends CommonUI {
+    private GameState gs;
     private final Player player;
     private final ArrayList<Entity> battleEnemies = new ArrayList<>();
-    private final Battle info;
+    private final Battle battle;
 
     // EFFECTS: set fields and calls the main method for doing battle
-    public CombatHandler(Player player, Enemy[] enemies, String description) {
-        this.player = player;
+    public CombatHandler(GameState gs, Enemy[] enemies) {
+        this.gs = gs;
+        this.player = gs.player();
         Collections.addAll(battleEnemies, enemies);
-        System.out.println(description);
-        this.info = new Battle(player, battleEnemies);
+        this.battle = new Battle(player, battleEnemies);
         System.out.println(" ---------------- Battle start! --------------- ");
         doCombat();
         postCombatSummary();
@@ -33,10 +35,10 @@ public class CombatHandler extends CommonUI {
     // MODIFIES: this
     // EFFECTS: main method for displaying what is happening in a battle
     private void doCombat() {
-        while (info.isInCombat()) {
-            System.out.println(info.startTurn());
-            while (info.isTurnOngoing() && info.isInCombat()) {
-                Entity entityWithInitiative = info.getHighestCombatActionsEntity();
+        while (battle.isInCombat()) {
+            System.out.println(battle.startTurn());
+            while (battle.isTurnOngoing() && battle.isInCombat()) {
+                Entity entityWithInitiative = battle.getHighestCombatActionsEntity();
                 inCombatSummary();
                 entityWithInitiative.refreshAbilities();
                 if (!entityWithInitiative.hostility()) {
@@ -47,13 +49,13 @@ public class CombatHandler extends CommonUI {
                     getUserSelectedAbility();
                 } else {
                     System.out.println("\n" + entityWithInitiative.name() + " has the initiative!\n");
-                    info.getEnemyBattleEffects((Enemy) entityWithInitiative);
+                    battle.getEnemyBattleEffects((Enemy) entityWithInitiative);
                 }
-                System.out.println(info.endActionPhase());
+                System.out.println(battle.endActionPhase());
             }
-            info.endTurn();
+            battle.endTurn();
         }
-        info.endBattle();
+        battle.endBattle();
     }
 
     // EFFECTS: prints the battle complete message and displays the players stats and inventory.
@@ -75,7 +77,7 @@ public class CombatHandler extends CommonUI {
             } else {
                 chosenTargets = getTargetsList(chosenAbility);
             }
-            info.addEffect(info.uses(player,chosenAbility,chosenTargets,true));
+            battle.addEffect(battle.uses(player,chosenAbility,chosenTargets,true));
         } catch (InsufficientResourceException e) {
             System.out.println(e.getMessage());
             getUserSelectedAbility();
@@ -144,7 +146,6 @@ public class CombatHandler extends CommonUI {
                     .append("\n|   CmbtActns: ").append(enemy.getCombatActions())
                     .append("\n| --------------------------- |");
         }
-//        combatSummary.append("\n| --------------------------- |");
         System.out.println(combatSummary);
     }
 }

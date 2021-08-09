@@ -6,12 +6,16 @@ import model.abilities.Wait;
 import org.json.JSONObject;
 import persistence.Writable;
 
+import java.util.ArrayList;
+
 /**
  * Represents the user's player/adventurer. Players have an extra field that is their level. Increasing level applies
  * lvlUpStats and for some players will cause unique effects.
  */
 
 public class Player extends Entity implements Writable {
+    private boolean inCombat = false;
+
     // EFFECTS: constructs a base player with a name and base starting gold of 50.
     public Player(String name) {
         this.name = name;
@@ -21,6 +25,7 @@ public class Player extends Entity implements Writable {
     // MODIFIES: this
     // EFFECTS: sets the abilities list of the player. That is, profession abilities and basic abilities;
     protected void setAbilities() {
+        abilities = new ArrayList<>();
         abilities.add(new Wait(this));
         abilities.add(new Slap(this));
         abilities.addAll(this.profession.getAbilities());
@@ -52,5 +57,26 @@ public class Player extends Entity implements Writable {
         playerJson.put("gold",this.gold);
 
         return playerJson;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: sets the name of the player to the argument
+    public void setName(String name) {
+        if (name != null) {
+            this.name = name;
+        } else {
+            this.name = "Null";
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: sets the value of inCombat
+    public void setInCombat(boolean inCombat) {
+        this.inCombat = inCombat;
+    }
+
+    // EFFECTS: returns the inCombat boolean
+    public boolean isInCombat() {
+        return inCombat;
     }
 }

@@ -18,8 +18,8 @@ public class PlayerGUI extends JPanel {
     private Player player;
 
     // EFFECTS: sets the size of the playerSummary window, updates the player to have its summary displayed.
-    public PlayerGUI(GameState gs) {
-        this.player = gs.player();
+    public PlayerGUI(Player player) {
+        this.player = player;
         setBackground(new Color(200,200,200));
         setBorder(BorderFactory.createLineBorder(LINE_COLOR));
         setBounds(0, 3 * AdvVoyGUI.getFrameHeight() / 4, 2 * AdvVoyGUI.getFrameWidth() / 3,
@@ -117,5 +117,9 @@ public class PlayerGUI extends JPanel {
         g.fillRect(xpBarXPos,125, 52, -104);
         g.setColor(new Color(100,180,0));
         g.fillRect(xpBarXPos + 2,123, 48,-1 * player.xp());
+    }
+
+    public void refresh() {
+        this.paintAll(getGraphics());
     }
 }

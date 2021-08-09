@@ -18,7 +18,7 @@ public class InstanceFactory {
     }
 
     // EFFECTS: returns an instance of the desired item from a string name of an item class already defined.
-    public Item itemInstanceFromString(String itemName) {
+    public Item itemInstance(String itemName) {
         InstanceFactory itemFactory = new InstanceFactory();
 
         Object maybeItemInstance = itemFactory.fromString("model.items.",itemName);
@@ -30,7 +30,7 @@ public class InstanceFactory {
 
     // EFFECTS: returns an instance of the desired race from a string name of a race class already defined.
     //          returns null if the input string does not match with a defined race.
-    public Race raceInstanceFromString(String raceName) {
+    public Race raceInstance(String raceName) {
         InstanceFactory raceFactory = new InstanceFactory();
 
         Object maybeRaceInstance = raceFactory.fromString("model.races.",raceName);
@@ -42,7 +42,7 @@ public class InstanceFactory {
 
     // EFFECTS: returns an instance of the desired profession from a string name of a profession class already defined.
     //          returns null if the input string does not match with a defined profession.
-    public Profession professionInstanceFromString(String professionName) {
+    public Profession professionInstance(String professionName) {
         InstanceFactory professionFactory = new InstanceFactory();
 
         Object maybeProfessionInstance = professionFactory.fromString("model.professions.",professionName);

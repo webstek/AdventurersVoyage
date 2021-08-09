@@ -2,11 +2,13 @@ package ui.gui;
 
 import model.GameState;
 import persistence.JsonReader;
+import ui.CommonUI;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 
 /**
@@ -15,13 +17,16 @@ import java.io.IOException;
 
 public class AdvVoyGUI extends JFrame {
     private static final Dimension FRAME_SIZE = new Dimension(1152, 648);
+    private static final CommonUI CM_UI = new CommonUI();
 
+    private CharacterCreatorGUI characterCreator;
     private PlayerGUI playerSummary;
     private InventoryGUI playerInventory;
     private TextInOutGUI textInOut;
     private JPanel detailsWindow;
 
     private GameState gs;
+    private boolean loadingFromSave = false;
 
     // EFFECTS: initializes all GUI components
     public AdvVoyGUI() {
@@ -29,11 +34,9 @@ public class AdvVoyGUI extends JFrame {
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(FRAME_SIZE);
-        getContentPane().setBackground(new Color(240, 235, 225));
         setUndecorated(true);
         setLayout(null);
 
-        // TODO currently set to a test file for ui testing purposes. Replace with placeholder file when UI complete.
         JsonReader initReader = new JsonReader("./data/testGameState.json");
         try {
             gs = initReader.read();
@@ -41,23 +44,75 @@ public class AdvVoyGUI extends JFrame {
         } catch (IOException e) {
             System.out.println("Unable to initialize game-state.");
         }
-        playerSummary = new PlayerGUI(gs);
+        characterCreator = new CharacterCreatorGUI(this, gs);
+        playerSummary = new PlayerGUI(gs.player());
         playerInventory = new InventoryGUI(gs.player().getInventory());
-        textInOut = new TextInOutGUI();
+        textInOut = new TextInOutGUI(gs);
 
-        setPlayingUI();
+        init();
 
         centerOnScreen();
         setVisible(true);
     }
 
-    private void setPlayingUI() {
+    private void init() {
+        queryLoadFromSave();
+        if (loadingFromSave) {
+            loadFromSave();
+        } else {
+            characterCreationGUI();
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: opens a JOptionPane window and asks the user if they want to load a saved game.
+    private void queryLoadFromSave() {
+        JOptionPane saveQueryFrame = new JOptionPane();
+        int o = JOptionPane.showConfirmDialog(saveQueryFrame,"Do you want to load a saved game?");
+        if (o == JOptionPane.YES_OPTION) {
+            loadingFromSave = true;
+        }
+        saveQueryFrame.setVisible(true);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: creates a popup that queries the user to load their data from a save, or not to.
+    private void loadFromSave() {
+        JsonReader saveReader = new JsonReader("./data/gameState.json");
+        try {
+            gs = saveReader.read();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        playerSummary = new PlayerGUI(gs.player());
+        playerInventory = new InventoryGUI(gs.player().getInventory());
+        textInOut = new TextInOutGUI(gs);
+        gs.player().resetCombatActions();
+        playingGUI();
+    }
+
+    // MODIFIES: this
+    // EFFECTS: refreshes the values in the playingGUI components.
+    private void refreshPlayerGUI() {
+        playerSummary.refresh();
+        playerInventory.refresh();
+    }
+
+    // MODIFIES: this
+    // EFFECTS: adds the UI objects for the user to create their character.
+    private void characterCreationGUI() {
+        add(characterCreator);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: adds the UI objects to play the game and removes the character creation UI objects.
+    public void playingGUI() {
         add(textInOut);
         add(playerSummary);
         add(playerInventory);
-        textInOut.setVisible(true);
-        playerSummary.setVisible(true);
-        playerInventory.setVisible(true);
+        characterCreator.setVisible(false);
+        gs.handleState();
+        textInOut.updateTextOut();
     }
 
     // MODIFIES: this

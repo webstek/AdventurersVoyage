@@ -1,30 +1,28 @@
 {
+  "displayText": "",
   "adventureNumber": 0,
   "player": {
     "profession": "Ranger",
     "gold": 0,
     "race": "Human",
     "stats": [
-      7,
-      5,
-      6,
-      11,
-      7,
-      325,
-      100,
       0,
       0,
-      2,
-      4,
-      2,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
       0,
       0
     ],
-    "name": "Initializing Player",
-    "xp": 15,
-    "inventory": [
-      {"name": "FluffyHat"},
-      {"name": "BirchBow"}
-    ]
+    "name": "",
+    "xp": 0,
+    "inventory": []
   }
 }

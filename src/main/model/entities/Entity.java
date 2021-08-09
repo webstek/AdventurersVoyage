@@ -28,7 +28,7 @@ public abstract class Entity {
     protected int xp = 0;
     protected int level = 0;
     protected int gold = 0;
-    protected ArrayList<Ability> abilities = new ArrayList<>();
+    protected ArrayList<Ability> abilities;
     // GOAL: implement entitiesInRange for target selection depending on ability selected;
 
     // MODIFIES: this
@@ -106,6 +106,7 @@ public abstract class Entity {
     // EFFECTS: adds the parameter item to the inventory list and updates the player stats
     public void addToInventory(Item item) {
         this.inventory.add(item);
+
         this.stats.add(item.stats());
         // TODO add item ability if item is consumable
     }

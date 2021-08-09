@@ -1,6 +1,7 @@
 package ui;
 
 import model.GameState;
+import model.combat.CombatHandler;
 import model.entities.*;
 import model.exceptions.UserInputException;
 import model.items.BirchBow;
@@ -67,7 +68,7 @@ public class AdventurerVoyageApp implements Writable {
                 + "\nevery adventure story needs a training arc, and so this one will be yours. Just to make sure "
                 + "\nyou are capable enough to be an Adventurer, and not some person trying to break my game, there"
                 + "\nshall be a test. Defeat the opponent in front of you!";
-        new CombatHandler(gs.player(), new Enemy[]{new CaveSlug(null)}, dscrpt1);
+        new CombatHandler(gs, new Enemy[]{new CaveSlug(null)});
         System.out.println("\nCongratulations, you have just slapped a cave slug to death! Not the first \nthing you "
                 + "think of doing when you wake up, but it was fun nonetheless.");
         gs.completeAnAdventure();
@@ -84,7 +85,7 @@ public class AdventurerVoyageApp implements Writable {
                 + "\nbring them a Birch Bow. Knowing that the Cave Slugs to the south frequently have stashes of"
                 + "\nBirch bows, you decide to go hunt one down.");
         String dscrpt1 = "\nIn the caves to the south, you find a Cave Slug, and it happens to have a Birch Bow!";
-        new CombatHandler(gs.player(), new Enemy[]{new CaveSlug(new BirchBow())}, dscrpt1);
+        new CombatHandler(gs, new Enemy[]{new CaveSlug(new BirchBow())});
     }
 
     // EFFECTS: saves the gameState to file

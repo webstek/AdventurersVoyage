@@ -6,6 +6,7 @@ import model.items.Item;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+// Inventory Table model
 public class InventoryTableModel extends DefaultTableModel {
     private ItemMatrix inventory;
 
@@ -26,6 +27,11 @@ public class InventoryTableModel extends DefaultTableModel {
     @Override
     public Class<?> getColumnClass(int columnIndex) {
         return ImageIcon.class;
+    }
+
+    @Override
+    public boolean isCellEditable(int row, int column) {
+        return false;
     }
 
     @Override
