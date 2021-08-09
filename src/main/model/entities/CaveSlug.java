@@ -7,6 +7,8 @@ import model.abilities.SlugBomb;
 import model.items.BirchBow;
 import model.items.Item;
 
+import java.util.ArrayList;
+
 
 /**
  * Cave slug enemy class
@@ -33,6 +35,7 @@ public class CaveSlug extends Enemy {
     // MODIFIES: this
     // EFFECTS: adds the unique Abilities of the enemy to the abilities list;
     protected void setAbilities() {
+        this.abilities = new ArrayList<>();
         this.abilities.add(new Slap(this));
         this.abilities.add(new SlugBomb(this));
         refreshAbilities();

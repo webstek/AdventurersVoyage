@@ -22,6 +22,7 @@ public class Battle {
     private ArrayList<Entity> entitiesInCombat = new ArrayList<>();
     private Player playerInCombat;
     private boolean isInCombat = true;
+    private boolean isNewTurn = true;
 
     // MODIFIES: player, enemies
     // EFFECTS: sets the playerInCombat and Enemies fields
@@ -155,8 +156,8 @@ public class Battle {
             ArrayList<Entity> players = new ArrayList<>();
             players.add(playerInCombat);
             addEffect(enemy.parse(chosenAbility,players,true));
-        } catch (InsufficientResourceException e) {
-            System.out.println(e.getMessage());
+        } catch (InsufficientResourceException ignored) {
+            ;
         }
     }
 
@@ -197,5 +198,13 @@ public class Battle {
             btlEff.remove();
         }
         playerInCombat.resetHealthAndMana();
+    }
+
+    public boolean isNewTurn() {
+        return isNewTurn;
+    }
+
+    public void setNewTurn(boolean newTurn) {
+        isNewTurn = newTurn;
     }
 }

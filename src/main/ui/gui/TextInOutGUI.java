@@ -5,7 +5,6 @@ import ui.CommonUI;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.InputEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -18,9 +17,11 @@ public class TextInOutGUI extends JPanel {
     private JLabel textOut = new JLabel();
     private JTextField textIn = new JTextField();
     private GameState gs;
+    private AdvVoyGUI mainGUI;
 
     // EFFECTS: initializes the text in and out components
-    public TextInOutGUI(GameState gs) {
+    public TextInOutGUI(AdvVoyGUI mainGUI, GameState gs) {
+        this.mainGUI = mainGUI;
         this.gs = gs;
         setBackground(new Color(200,200,200));
         setBorder(BorderFactory.createLineBorder(LINE_COLOR));
@@ -86,6 +87,7 @@ public class TextInOutGUI extends JPanel {
                 clearTextIn();
                 gs.handleState();
                 updateTextOut();
+                mainGUI.refreshPlayerGUI();
             } else if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
                 System.out.println("caught control");
                 controlDown = true;

@@ -1,6 +1,7 @@
 package model.combat;
 
 import model.GameState;
+import model.UsesUserInput;
 import model.abilities.Ability;
 import model.entities.*;
 import model.exceptions.InsufficientResourceException;
@@ -15,7 +16,7 @@ import java.util.Collections;
  * Called when a battle is necessary in the Story. Sends the appropriate response string for the input string
  */
 
-public class CombatHandler extends CommonUI {
+public class CombatHandler extends CommonUI implements UsesUserInput {
     private GameState gs;
     private final Player player;
     private final ArrayList<Entity> battleEnemies = new ArrayList<>();
@@ -27,9 +28,46 @@ public class CombatHandler extends CommonUI {
         this.player = gs.player();
         Collections.addAll(battleEnemies, enemies);
         this.battle = new Battle(player, battleEnemies);
-        System.out.println(" ---------------- Battle start! --------------- ");
-        doCombat();
-        postCombatSummary();
+    }
+
+    // MODIFIES: this, gs
+    // EFFECTS: handles the actionText inputted by the user by invoking the correct methods and setting the displayText
+    public void handleCombatIO() {
+        if (battle.isInCombat()) {
+            if (!battle.isNewTurn()) {
+                gs.appendToDisplayText(battle.startTurn());
+                battle.setNewTurn(false);
+            } else if (battle.isTurnOngoing()) {
+                handleCombatTurn();
+            } else {
+                battle.setNewTurn(true);
+                battle.endTurn();
+            }
+        } else {
+            battle.endBattle();
+            player.setInCombat(false);
+            gs.completeAnAdventure();
+            gs.handleState();
+        }
+    }
+
+    // MODIFIES: gs, player, enemies
+    // EFFECTS: handles the actionText inputted by the user for each turn of battle
+    private void handleCombatTurn() {
+        Entity entityWithInitiative = battle.getHighestCombatActionsEntity();
+        entityWithInitiative.refreshAbilities();
+        if (entityWithInitiative instanceof Player) {
+            if (gs.hasUnusedUserInput()) {
+                applyUserSelectedAbility();
+                consumedUserInput();
+                handleCombatTurn();
+            } else {
+                gs.setHasUnusedUserInput(true);
+            }
+        } else {
+            battle.getEnemyBattleEffects((Enemy) entityWithInitiative);
+        }
+        gs.appendToDisplayText(battle.endActionPhase());
     }
 
     // MODIFIES: this
@@ -46,7 +84,7 @@ public class CombatHandler extends CommonUI {
                     System.out.println(displayAbilities(entityWithInitiative.abilities(),false,true));
                     //TODO make option to end actionPhase with combatActions remaining, make a print for this option
                     System.out.println("Select an ability to use: ");
-                    getUserSelectedAbility();
+                    applyUserSelectedAbility();
                 } else {
                     System.out.println("\n" + entityWithInitiative.name() + " has the initiative!\n");
                     battle.getEnemyBattleEffects((Enemy) entityWithInitiative);
@@ -68,7 +106,7 @@ public class CombatHandler extends CommonUI {
     // MODIFIES: this, effectsToApply
     // EFFECTS: Queries the user for an ability to use and handles invalid inputs. Calls the info.uses() method to
     //          update the effectsToApply
-    private void getUserSelectedAbility() {
+    private void applyUserSelectedAbility() {
         try {
             Ability chosenAbility = chooseAbility(player);
             ArrayList<Entity> chosenTargets = new ArrayList<>();
@@ -78,23 +116,17 @@ public class CombatHandler extends CommonUI {
                 chosenTargets = getTargetsList(chosenAbility);
             }
             battle.addEffect(battle.uses(player,chosenAbility,chosenTargets,true));
-        } catch (InsufficientResourceException e) {
-            System.out.println(e.getMessage());
-            getUserSelectedAbility();
+        } catch (InsufficientResourceException | UserInputException e) {
+            gs.setDisplayText(e.getMessage());
         }
     }
 
     // MODIFIES: this
     // EFFECTS: gets an input from the user and selects the associated ability if the string corresponds.
-    private Ability chooseAbility(Entity entity) {
+    private Ability chooseAbility(Entity entity) throws UserInputException {
         Ability chosenAbility;
-        try {
-            chosenAbility = entity.getAbilityFromString(getFullInput(null));
-            return chosenAbility;
-        } catch (UserInputException e) {
-            System.out.println(e.getMessage());
-            return chooseAbility(entity);
-        }
+        chosenAbility = entity.getAbilityFromString(gs.getActionText());
+        return chosenAbility;
     }
 
     private ArrayList<Entity> getTargetsList(Ability ability) {
@@ -147,5 +179,10 @@ public class CombatHandler extends CommonUI {
                     .append("\n| --------------------------- |");
         }
         System.out.println(combatSummary);
+    }
+
+    @Override
+    public void consumedUserInput() {
+        gs.setHasUnusedUserInput(false);
     }
 }

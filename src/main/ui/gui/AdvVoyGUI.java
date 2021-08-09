@@ -6,9 +6,6 @@ import ui.CommonUI;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.IOException;
 
 /**
@@ -17,7 +14,6 @@ import java.io.IOException;
 
 public class AdvVoyGUI extends JFrame {
     private static final Dimension FRAME_SIZE = new Dimension(1152, 648);
-    private static final CommonUI CM_UI = new CommonUI();
 
     private CharacterCreatorGUI characterCreator;
     private PlayerGUI playerSummary;
@@ -47,7 +43,7 @@ public class AdvVoyGUI extends JFrame {
         characterCreator = new CharacterCreatorGUI(this, gs);
         playerSummary = new PlayerGUI(gs.player());
         playerInventory = new InventoryGUI(gs.player().getInventory());
-        textInOut = new TextInOutGUI(gs);
+        textInOut = new TextInOutGUI(this, gs);
 
         init();
 
@@ -86,14 +82,14 @@ public class AdvVoyGUI extends JFrame {
         }
         playerSummary = new PlayerGUI(gs.player());
         playerInventory = new InventoryGUI(gs.player().getInventory());
-        textInOut = new TextInOutGUI(gs);
+        textInOut = new TextInOutGUI(this, gs);
         gs.player().resetCombatActions();
         playingGUI();
     }
 
     // MODIFIES: this
     // EFFECTS: refreshes the values in the playingGUI components.
-    private void refreshPlayerGUI() {
+    public void refreshPlayerGUI() {
         playerSummary.refresh();
         playerInventory.refresh();
     }

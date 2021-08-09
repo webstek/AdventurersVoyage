@@ -1,6 +1,10 @@
 package model;
 
+import model.combat.CombatHandler;
+import model.entities.CaveSlug;
+import model.entities.Enemy;
 import model.entities.Player;
+import model.items.BirchBow;
 import org.json.JSONObject;
 import persistence.JsonWriter;
 
@@ -9,8 +13,10 @@ import java.io.FileNotFoundException;
 public class GameState {
     private int adventureNumber;
     private Player player;
-    private String actionText;
+    private CombatHandler combat;
     private String displayText;
+    private String actionText;
+    private boolean hasUnusedUserInput = false;
 
     // EFFECTS: constructs a gameState with the initial field values from the parameters
     public GameState(int adventureNumber, Player player) {
@@ -56,6 +62,29 @@ public class GameState {
         return actionText;
     }
 
+    // MODIFIES: this
+    // EFFECTS: sets the hasUnUsedUserInput field to the boolean argument value
+    public void setHasUnusedUserInput(boolean bool) {
+        hasUnusedUserInput = bool;
+    }
+
+    // EFFECTS: returns the value of the hasUnusedUserInput field
+    public boolean hasUnusedUserInput() {
+        return hasUnusedUserInput;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: sets the displayText field
+    public void setDisplayText(String str) {
+        displayText = str;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: appends the str in the argument to the displayText field. Note there are no default spaces or new lines.
+    public void appendToDisplayText(String str) {
+        displayText = displayText + str;
+    }
+
     // EFFECTS: returns the display text
     public String getDisplayText() {
         return displayText;
@@ -86,22 +115,32 @@ public class GameState {
     // EFFECTS: invokes the appropriate methods for the current game state
     public void handleState() {
         if (adventureNumber == 0) {
-            if (!player.isInCombat()) {
-                displayText = "Now, you must learn how to do combat! An exciting process, although somewhat tedious if "
-                        + "I make your damage values too low. For now, the essentials. Battles are made up of turns, "
-                        + "which end when all entities in battle have zero combat actions (ca). When an entity has the "
-                        + "highest ca, it has the initiative, so they get to use an ability. After each turn, ca are "
-                        + "reset for each entity, to their current total speed stat. The battle ends when all enemies "
-                        + "are dead!\n\nThat's all on the essentials of battle folks."
-                        + "\n\nWell then, perhaps we need to motivate the necessity of a tutorial. We should consider "
-                        + "that every adventure story needs a training arc, and so this one will be yours. Just to "
-                        + "make sure you are capable enough to be an Adventurer, and not some person trying to "
-                        + "break my game, there shall be a test. Defeat the opponent in front of you!"
-                        + "\n\n\n\n Press enter when you are ready...";
-                player.setInCombat(true);
-            } else {
-                displayText = " ---------------- Battle start! --------------- ";
+            battle0();
+        } else if (adventureNumber == 1) {
+            displayText = "Thanks for playing! Much, much, MUCH, more content is in the works!  :O";
+        }
+    }
+
+    private void battle0() {
+        if (!player.isInCombat()) {
+            displayText = "Now, you must learn how to do combat! An exciting process, although somewhat tedious if "
+                    + "I make your damage values too low. For now, the essentials. Battles are made up of turns, "
+                    + "which end when all entities in battle have zero combat actions (ca). When an entity has the "
+                    + "highest ca, it has the initiative, so they get to use an ability. After each turn, ca are "
+                    + "reset for each entity, to their current total speed stat. The battle ends when all enemies "
+                    + "are dead!\n\nThat's all on the essentials of battle folks."
+                    + "\n\nWell then, perhaps we need to motivate the necessity of a tutorial. We should consider "
+                    + "that every adventure story needs a training arc, and so this one will be yours. Just to "
+                    + "make sure you are capable enough to be an Adventurer, and not some person trying to "
+                    + "break my game, there shall be a test. Defeat the opponent in front of you!"
+                    + "\n\n\n\n Press enter when you are ready...";
+            player.setInCombat(true);
+            combat = new CombatHandler(this, new Enemy[]{new CaveSlug(new BirchBow())});
+        } else {
+            if (!hasUnusedUserInput) {
+                displayText = " -------------- Battle Start! -------------- \n  Oh no! A cave slug appeared!.";
             }
+            combat.handleCombatIO();
         }
     }
 }
