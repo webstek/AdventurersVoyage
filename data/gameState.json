@@ -1,28 +1,28 @@
 {
-    "displayText": " -------------- Battle Start! -------------- \n  Oh no! A cave slug appeared!\n\n\nYou have the initiative! Choose something to do!\n\nCave Slug took 66dmg from Power Shot! \n\n\n",
-    "adventureNumber": 0,
+    "displayText": "\n\nAlright Test, it's time for you to begin your voyage of epic proportions, well, let's hope for your sake that it's long. Until we meet again adventurer!\n\nYou have just finished eating a yummy breakfast. Including french toast, although without the syrup. The previous evening, you received a request from the local bowyer to bring them a Birch Bow. Knowing that the Cave Slugs to the south frequently have stashes of Birch bows, you decide to go hunt one down.\n\nIn the caves to the south, you find a Cave Slug, and it happens to have a Birch Bow!\n\n\n\n Thanks for playing! Much, much, MUCH, more content is in the works!  :O",
+    "adventureNumber": 1,
     "player": {
         "profession": "Ranger",
         "gold": 0,
-        "race": "Human",
+        "race": "Elf",
         "stats": [
-            7,
-            5,
+            8,
             6,
+            33,
             8,
             7,
+            250,
             200,
-            50,
             0,
             0,
             2,
             4,
             2,
-            0,
+            15,
             0
         ],
-        "name": "Jim",
-        "xp": 0,
-        "inventory": []
+        "name": "Test",
+        "xp": 10,
+        "inventory": [{"name": "BirchBow"}]
     }
 }

@@ -65,7 +65,7 @@ public class CombatHandler extends CommonUI implements UsesUserInput {
                 consumedUserInput();
                 handleCombatTurn();
             } else {
-                gs.appendToDisplayText("\n\nYou have the initiative! Choose something to do!\n");
+                gs.appendToDisplayText("\n\nYou have the initiative! Choose an ability to use!\n");
                 gs.setHasUnusedUserInput(true);
             }
         } else {

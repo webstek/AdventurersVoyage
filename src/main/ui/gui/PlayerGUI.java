@@ -14,6 +14,9 @@ public class PlayerGUI extends JPanel {
     private static final Color LINE_COLOR = new Color(100,110,120);
     private static final Color RESOURCE_BAR_BG_COLOR = new Color(80,80,80);
     private static final Color FONT_COLOR = new Color(0,0,0);
+    int maxHealth = 0;
+    int maxMana = 0;
+    int maxCAPx = 0;
 
     private Player player;
 
@@ -61,7 +64,6 @@ public class PlayerGUI extends JPanel {
     // MODIFIES: g
     // EFFECTS: draws the Hp bar and health text onto g.
     private void drawHpBar(Graphics g) {
-        int maxHealth = 0;
         int health = player.stats().in(0,5);
         if (health > maxHealth) {
             maxHealth = health;
@@ -77,7 +79,6 @@ public class PlayerGUI extends JPanel {
     // MODIFIES: g
     // EFFECTS: draws the Mp bar and mana text onto g.
     private void drawMpBar(Graphics g) {
-        int maxMana = 0;
         int mana = player.stats().in(0,6);
         if (mana > maxMana) {
             maxMana = mana;
@@ -93,7 +94,6 @@ public class PlayerGUI extends JPanel {
     // MODIFIES: g
     // EFFECTS: draws the Combat Actions bar and ca text onto g.
     private void drawCaBar(Graphics g) {
-        int maxCAPx = 0;
         int caPx = 40 * player.getCombatActions();
         if (caPx > maxCAPx) {
             maxCAPx = caPx;
