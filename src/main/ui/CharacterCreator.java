@@ -143,8 +143,8 @@ public class CharacterCreator extends CommonUI {
     public String getRaceInfo(Race race) {
         return "| Race Attributes ------------|\n| " + race.getDescription()
                 + "\n|-----------------------------|\n| Strengths: "
-                + race.getStrengths() + "\n| Weaknesses: "
-                + race.getWeaknesses() + displayTypeStats(race.stats()) + "\n" + displayRaceHealthAndMana(race)
+                + race.getStrengths() + "\n| Weaknesses: " + race.getWeaknesses()
+                + "\n" + displayTypeStats(race.stats()) + "\n" + displayRaceHealthAndMana(race)
                 + "\n| With per level gains of:\n| " + race.getHpGain() + "Hp and " + race.getMpGain() + "Mp."
                 + "\n|-----------------------------|";
     }

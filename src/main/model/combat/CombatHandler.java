@@ -21,6 +21,7 @@ public class CombatHandler extends CommonUI implements UsesUserInput {
     private final Player player;
     private final ArrayList<Entity> battleEnemies = new ArrayList<>();
     private final Battle battle;
+    private int turnNumber = 0;
 
     // EFFECTS: set fields and calls the main method for doing battle
     public CombatHandler(GameState gs, Enemy[] enemies) {
@@ -34,7 +35,7 @@ public class CombatHandler extends CommonUI implements UsesUserInput {
     // EFFECTS: handles the actionText inputted by the user by invoking the correct methods and setting the displayText
     public void handleCombatIO() {
         if (battle.isInCombat()) {
-            if (!battle.isNewTurn()) {
+            if (battle.isNewTurn()) {
                 gs.appendToDisplayText(battle.startTurn());
                 battle.setNewTurn(false);
             } else if (battle.isTurnOngoing()) {
@@ -42,9 +43,11 @@ public class CombatHandler extends CommonUI implements UsesUserInput {
             } else {
                 battle.setNewTurn(true);
                 battle.endTurn();
+                turnNumber++;
             }
         } else {
             battle.endBattle();
+            turnNumber = 0;
             player.setInCombat(false);
             gs.completeAnAdventure();
             gs.handleState();
@@ -62,6 +65,7 @@ public class CombatHandler extends CommonUI implements UsesUserInput {
                 consumedUserInput();
                 handleCombatTurn();
             } else {
+                gs.appendToDisplayText("\n\nYou have the initiative! Choose something to do!\n");
                 gs.setHasUnusedUserInput(true);
             }
         } else {
@@ -181,6 +185,18 @@ public class CombatHandler extends CommonUI implements UsesUserInput {
         System.out.println(combatSummary);
     }
 
+    // EFFECTS: returns the turnNumber in the combat handler
+    public int getTurnNumber() {
+        return turnNumber;
+    }
+
+    // EFFECTS: returns the enemies the player is in combat with
+    public ArrayList<Entity> getEnemies() {
+        return battleEnemies;
+    }
+
+    // MODIFIES: gs
+    // EFFECTS: sets the gs hasUnusedUserInput to false
     @Override
     public void consumedUserInput() {
         gs.setHasUnusedUserInput(false);

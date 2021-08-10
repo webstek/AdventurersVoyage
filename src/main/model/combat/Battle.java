@@ -81,7 +81,7 @@ public class Battle {
     //          in battle. Checks if any enemies are dead and removes them from enemies if so.
     public String startTurn() {
         StringBuilder startTurnSummary = new StringBuilder();
-        startTurnSummary.append("Turn [").append(turn++).append("]");
+        startTurnSummary.append("\nTurn [").append(turn++).append("]");
         for (Entity entity : entitiesInCombat) {
             entity.resetCombatActions();
         }

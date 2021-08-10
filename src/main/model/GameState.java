@@ -3,12 +3,15 @@ package model;
 import model.combat.CombatHandler;
 import model.entities.CaveSlug;
 import model.entities.Enemy;
+import model.entities.Entity;
 import model.entities.Player;
 import model.items.BirchBow;
+import model.items.FluffyHat;
 import org.json.JSONObject;
 import persistence.JsonWriter;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 public class GameState {
     private int adventureNumber;
@@ -112,12 +115,26 @@ public class GameState {
         return player;
     }
 
+    // EFFECTS: returns the list of enemies the user is currently in combat with.
+    public ArrayList<Entity> getEnemies() {
+        return combat.getEnemies();
+    }
+
     // EFFECTS: invokes the appropriate methods for the current game state
     public void handleState() {
         if (adventureNumber == 0) {
             battle0();
         } else if (adventureNumber == 1) {
-            displayText = "Thanks for playing! Much, much, MUCH, more content is in the works!  :O";
+            displayText = "\n\nAlright " + this.player().name() + ", it's time for you to begin your voyage of epic "
+                    + "proportions, well, let's hope for your sake that it's long. Until we meet again adventurer!"
+                    + "\n\nYou have just finished eating a yummy breakfast. Including french toast, although "
+                    + "without the syrup. The previous evening, you received a request from the local bowyer to "
+                    + "bring them a Birch Bow. Knowing that the Cave Slugs to the south frequently have stashes of "
+                    + "Birch bows, you decide to go hunt one down."
+                    + "\n\nIn the caves to the south, you find a Cave Slug, and it happens to have a Birch Bow!"
+                    + "\n\n\n\n Thanks for playing! Much, much, MUCH, more content is in the works!  :O";
+        } else {
+            displayText = "\n\n\n\n\n\n\n\n\nThanks for playing! Much, much, MUCH, more content is in the works!  :O";
         }
     }
 
@@ -137,8 +154,10 @@ public class GameState {
             player.setInCombat(true);
             combat = new CombatHandler(this, new Enemy[]{new CaveSlug(new BirchBow())});
         } else {
-            if (!hasUnusedUserInput) {
-                displayText = " -------------- Battle Start! -------------- \n  Oh no! A cave slug appeared!.";
+            if (combat.getTurnNumber() == 0) {
+                displayText = " -------------- Battle Start! -------------- \n  Oh no! A cave slug appeared!\n";
+            } else if (combat.getTurnNumber() != 0) {
+                displayText = "";
             }
             combat.handleCombatIO();
         }

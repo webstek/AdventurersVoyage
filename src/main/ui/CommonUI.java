@@ -1,5 +1,6 @@
 package ui;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -154,6 +155,7 @@ public class CommonUI {
     // MODIFIES: textOut
     // EFFECTS: displays the String in the argument with \n creating a new line in the textOut box.
     public void setTextOut(JLabel textOut, String str) {
+        textOut.setFont(new Font("Arial", Font.PLAIN, 15));
         textOut.setText("");
         String formattedStr = str.replace("\n","<br>");
         formattedStr = "<html>" + formattedStr + "</html>";

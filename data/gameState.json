@@ -1,5 +1,5 @@
 {
-    "displayText": "Now, you must learn how to do combat! An exciting process, although somewhat tedious if I make your damage values too low. For now, the essentials. Battles are made up of turns, which end when all entities in battle have zero combat actions (ca). When an entity has the highest ca, it has the initiative, so they get to use an ability. After each turn, ca are reset for each entity, to their current total speed stat. The battle ends when all enemies are dead!\n \nThat's all on the essentials of battle folks.",
+    "displayText": " -------------- Battle Start! -------------- \n  Oh no! A cave slug appeared!\n\n\nYou have the initiative! Choose something to do!\n\nCave Slug took 66dmg from Power Shot! \n\n\n",
     "adventureNumber": 0,
     "player": {
         "profession": "Ranger",
@@ -12,7 +12,7 @@
             8,
             7,
             200,
-            100,
+            50,
             0,
             0,
             2,
@@ -21,8 +21,8 @@
             0,
             0
         ],
-        "name": "Appii",
+        "name": "Jim",
         "xp": 0,
-        "inventory": [{"name": "FluffyHat"}]
+        "inventory": []
     }
 }

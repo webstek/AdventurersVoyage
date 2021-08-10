@@ -1,12 +1,15 @@
 package ui.gui;
 
 import model.GameState;
+import model.entities.Entity;
 import persistence.JsonReader;
 import ui.CommonUI;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * GUI class for Adventurer's Voyage.
@@ -14,15 +17,19 @@ import java.io.IOException;
 
 public class AdvVoyGUI extends JFrame {
     private static final Dimension FRAME_SIZE = new Dimension(1152, 648);
+    private static final CommonUI CMN_UI = new CommonUI();
 
     private CharacterCreatorGUI characterCreator;
     private PlayerGUI playerSummary;
     private InventoryGUI playerInventory;
     private TextInOutGUI textInOut;
-    private JPanel detailsWindow;
+    private JPanel detailsPanel;
+    private JPanel menuPanel;
+    private JLabel enemySummaries;
 
     private GameState gs;
     private boolean loadingFromSave = false;
+    private ArrayList<Entity> enemies;
 
     // EFFECTS: initializes all GUI components
     public AdvVoyGUI() {
@@ -44,6 +51,10 @@ public class AdvVoyGUI extends JFrame {
         playerSummary = new PlayerGUI(gs.player());
         playerInventory = new InventoryGUI(gs.player().getInventory());
         textInOut = new TextInOutGUI(this, gs);
+
+        detailsPanel = new JPanel();
+        menuPanel = new JPanel();
+        enemySummaries = new JLabel();
 
         init();
 
@@ -106,9 +117,75 @@ public class AdvVoyGUI extends JFrame {
         add(textInOut);
         add(playerSummary);
         add(playerInventory);
+
+        initMenuPanel();
+        detailsPanel.setVisible(false);
+        add(detailsPanel);
+        detailsPanel.add(enemySummaries);
+        add(menuPanel);
         characterCreator.setVisible(false);
         gs.handleState();
         textInOut.updateTextOut();
+    }
+
+    // MODIFIES: this, details panel
+    // EFFECTS: checks if enemies is not null and draws the details panel if so. Otherwise hides the panel.
+    public void tryDetailsPanel() {
+        detailsPanel.setBounds(2 * getFrameWidth() / 3, 100, getFrameWidth() / 3, getFrameHeight() / 2 - 25);
+        detailsPanel.setBackground(new Color(190,190,200));
+        detailsPanel.setLayout(null);
+
+        enemySummaries.setHorizontalAlignment(SwingConstants.LEFT);
+        enemySummaries.setVerticalAlignment(SwingConstants.TOP);
+        enemySummaries.setFont(new Font("Arial",Font.PLAIN,15));
+        enemySummaries.setBounds(120,30,180,90);
+        if (enemies != null && gs.player().isInCombat()) {
+            enemySummaries.setText("");
+            detailsPanel.setVisible(true);
+            for (Entity enemy : enemies) {
+                drawEnemyStats(enemySummaries, enemy);
+            }
+        } else {
+            detailsPanel.setVisible(false);
+        }
+    }
+
+    // MODIFIES: detailsPanel
+    // EFFECTS: displays the Enemy's name, hp, mp, and ca in detailsPanel
+    private void drawEnemyStats(JLabel enemySummaries, Entity enemy) {
+        String summaryString = enemySummaries.getText()
+                + "\n ----- " + enemy.name() + " ----- \n  Hp: " + enemy.stats().in(0,5) + "\n  Mp: "
+                + enemy.stats().in(0,6) + "\n  CA: " + enemy.getCombatActions();
+        System.out.println("setting new text");
+        CMN_UI.setTextOut(enemySummaries, summaryString);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: initializes the menuPanel and
+    private void initMenuPanel() {
+        menuPanel.setBounds(2 * getFrameWidth() / 3, 0, getFrameWidth() / 3, getFrameHeight() / 2 - 25);
+        menuPanel.setBackground(new Color(190,190,200));
+
+        JButton playerSummary = new JButton("Player Summary");
+        playerSummary.addActionListener(e -> {
+            JOptionPane summary = new JOptionPane();
+            JOptionPane.showMessageDialog(summary, CMN_UI.playerSummary(gs.player()));
+        });
+        JButton exit = new JButton("Save and Exit");
+        exit.addActionListener(e -> {
+            gs.save();
+            textInOut.notifySaved();
+            dispatchEvent(new WindowEvent(textInOut.getMainGUI(), WindowEvent.WINDOW_CLOSING));
+        });
+        JButton inventorySummary = new JButton("Inventory Summary");
+        inventorySummary.addActionListener(e -> {
+            JOptionPane summary = new JOptionPane();
+            JOptionPane.showMessageDialog(summary, CMN_UI.displayInventory(gs.player().getInventory(),true));
+        });
+
+        menuPanel.add(playerSummary);
+        menuPanel.add(exit);
+        menuPanel.add(inventorySummary);
     }
 
     // MODIFIES: this
@@ -127,5 +204,11 @@ public class AdvVoyGUI extends JFrame {
     // EFFECTS: returns the frame width
     public static int getFrameWidth() {
         return FRAME_SIZE.width;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: sets the enemies field.
+    public void setEnemies(ArrayList<Entity> enemies) {
+        this.enemies = enemies;
     }
 }

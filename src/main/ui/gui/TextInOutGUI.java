@@ -87,6 +87,8 @@ public class TextInOutGUI extends JPanel {
                 clearTextIn();
                 gs.handleState();
                 updateTextOut();
+                mainGUI.setEnemies(gs.getEnemies());
+                mainGUI.tryDetailsPanel();
                 mainGUI.refreshPlayerGUI();
             } else if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
                 System.out.println("caught control");
@@ -106,8 +108,13 @@ public class TextInOutGUI extends JPanel {
     }
 
     // EFFECTS: pops up a message JOptionPane to notify the user that their game has been saved.
-    private void notifySaved() {
+    public void notifySaved() {
         JOptionPane saveFrame = new JOptionPane();
         JOptionPane.showMessageDialog(saveFrame, "Your game has been saved.");
+    }
+
+    // EFFECTS: returns the mainGUI object
+    public AdvVoyGUI getMainGUI() {
+        return mainGUI;
     }
 }
