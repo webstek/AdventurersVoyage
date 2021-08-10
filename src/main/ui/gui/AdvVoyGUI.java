@@ -156,7 +156,6 @@ public class AdvVoyGUI extends JFrame {
         String summaryString = enemySummaries.getText()
                 + "\n ----- " + enemy.name() + " ----- \n  Hp: " + enemy.stats().in(0,5) + "\n  Mp: "
                 + enemy.stats().in(0,6) + "\n  CA: " + enemy.getCombatActions();
-        System.out.println("setting new text");
         CMN_UI.setTextOut(enemySummaries, summaryString);
     }
 

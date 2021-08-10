@@ -36,14 +36,17 @@ public class CombatHandler extends CommonUI implements UsesUserInput {
     public void handleCombatIO() {
         if (battle.isInCombat()) {
             if (battle.isNewTurn()) {
+                newBattleInfo("a Cave Slug");
                 gs.appendToDisplayText(battle.startTurn());
                 battle.setNewTurn(false);
+                handleCombatTurn();
             } else if (battle.isTurnOngoing()) {
                 handleCombatTurn();
             } else {
                 battle.setNewTurn(true);
                 battle.endTurn();
                 turnNumber++;
+                handleCombatIO();
             }
         } else {
             battle.endBattle();
@@ -51,6 +54,14 @@ public class CombatHandler extends CommonUI implements UsesUserInput {
             player.setInCombat(false);
             gs.completeAnAdventure();
             gs.handleState();
+        }
+    }
+
+    // EFFECTS: appends the battle start text and the enemies that appeared to the display text
+    private void newBattleInfo(String enemiesAppeared) {
+        if (turnNumber == 0) {
+            gs.appendToDisplayText(" -------------- Battle Start! -------------- \n\n"
+                    + "  Oh no! " + enemiesAppeared + " appeared!\n");
         }
     }
 
@@ -62,6 +73,7 @@ public class CombatHandler extends CommonUI implements UsesUserInput {
         if (entityWithInitiative instanceof Player) {
             if (gs.hasUnusedUserInput()) {
                 applyUserSelectedAbility();
+                gs.appendToDisplayText(battle.endActionPhase());
                 consumedUserInput();
                 handleCombatTurn();
             } else {

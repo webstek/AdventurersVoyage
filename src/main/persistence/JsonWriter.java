@@ -2,7 +2,6 @@ package persistence;
 
 import model.GameState;
 import org.json.JSONObject;
-import ui.AdventurerVoyageApp;
 
 import java.io.File;
 import java.io.FileNotFoundException;

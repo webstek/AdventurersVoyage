@@ -59,7 +59,6 @@ public class TextInOutGUI extends JPanel {
     private void fireToActionText(GameState gs) {
         String actionText = textIn.getText();
         gs.setActionText(actionText);
-        System.out.println(gs.getActionText());
     }
 
     // MODIFIES: this

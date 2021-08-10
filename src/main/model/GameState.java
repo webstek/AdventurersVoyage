@@ -155,11 +155,7 @@ public class GameState {
             player.setInCombat(true);
             combat = new CombatHandler(this, new Enemy[]{new CaveSlug(new BirchBow())});
         } else {
-            if (combat.getTurnNumber() == 0) {
-                displayText = " -------------- Battle Start! -------------- \n  Oh no! A cave slug appeared!\n";
-            } else if (combat.getTurnNumber() != 0) {
-                displayText = "";
-            }
+            displayText = "";
             combat.handleCombatIO();
         }
     }

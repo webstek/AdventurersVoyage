@@ -1,5 +1,5 @@
 {
-    "displayText": "\n\nAlright Test, it's time for you to begin your voyage of epic proportions, well, let's hope for your sake that it's long. Until we meet again adventurer!\n\nYou have just finished eating a yummy breakfast. Including french toast, although without the syrup. The previous evening, you received a request from the local bowyer to bring them a Birch Bow. Knowing that the Cave Slugs to the south frequently have stashes of Birch bows, you decide to go hunt one down.\n\nIn the caves to the south, you find a Cave Slug, and it happens to have a Birch Bow!\n\n\n\n Thanks for playing! Much, much, MUCH, more content is in the works!  :O",
+    "displayText": "\n\nAlright Peachy, it's time for you to begin your voyage of epic proportions, well, let's hope for your sake that it's long. Until we meet again adventurer!\n\nYou have just finished eating a yummy breakfast. Including french toast, although without the syrup. The previous evening, you received a request from the local bowyer to bring them a Birch Bow. Knowing that the Cave Slugs to the south frequently have stashes of Birch bows, you decide to go hunt one down.\n\nIn the caves to the south, you find a Cave Slug, and it happens to have a Birch Bow!\n\n\n\n Thanks for playing! Much, much, MUCH, more content is in the works!  :O",
     "adventureNumber": 1,
     "player": {
         "profession": "Ranger",
@@ -8,7 +8,7 @@
         "stats": [
             8,
             6,
-            33,
+            6,
             8,
             7,
             250,
@@ -21,7 +21,7 @@
             15,
             0
         ],
-        "name": "Test",
+        "name": "Peachy",
         "xp": 10,
         "inventory": [{"name": "BirchBow"}]
     }
