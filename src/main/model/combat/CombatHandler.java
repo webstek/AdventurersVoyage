@@ -1,7 +1,6 @@
 package model.combat;
 
 import model.GameState;
-import model.UsesUserInput;
 import model.abilities.Ability;
 import model.entities.*;
 import model.exceptions.InsufficientResourceException;
@@ -16,7 +15,7 @@ import java.util.Collections;
  * Called when a battle is necessary in the Story. Sends the appropriate response string for the input string
  */
 
-public class CombatHandler extends CommonUI implements UsesUserInput {
+public class CombatHandler {
     private GameState gs;
     private final Player player;
     private final ArrayList<Entity> battleEnemies = new ArrayList<>();
@@ -86,38 +85,6 @@ public class CombatHandler extends CommonUI implements UsesUserInput {
         gs.appendToDisplayText(battle.endActionPhase());
     }
 
-    // MODIFIES: this
-    // EFFECTS: main method for displaying what is happening in a battle
-    private void doCombat() {
-        while (battle.isInCombat()) {
-            System.out.println(battle.startTurn());
-            while (battle.isTurnOngoing() && battle.isInCombat()) {
-                Entity entityWithInitiative = battle.getHighestCombatActionsEntity();
-                inCombatSummary();
-                entityWithInitiative.refreshAbilities();
-                if (!entityWithInitiative.hostility()) {
-                    System.out.println("\nYou have the initiative! Choose something to do!");
-                    System.out.println(displayAbilities(entityWithInitiative.abilities(),false,true));
-                    //TODO make option to end actionPhase with combatActions remaining, make a print for this option
-                    System.out.println("Select an ability to use: ");
-                    applyUserSelectedAbility();
-                } else {
-                    System.out.println("\n" + entityWithInitiative.name() + " has the initiative!\n");
-                    battle.getEnemyBattleEffects((Enemy) entityWithInitiative);
-                }
-                System.out.println(battle.endActionPhase());
-            }
-            battle.endTurn();
-        }
-        battle.endBattle();
-    }
-
-    // EFFECTS: prints the battle complete message and displays the players stats and inventory.
-    private void postCombatSummary() {
-        System.out.println(" -------------- Battle complete! -------------- ");
-        System.out.println("\n Your health and mana have been replenished.\n" + displayStats(player.stats(),true));
-        System.out.println(displayInventory(player.getInventory(), true));
-    }
 
     // MODIFIES: this, effectsToApply
     // EFFECTS: Queries the user for an ability to use and handles invalid inputs. Calls the info.uses() method to
@@ -126,11 +93,7 @@ public class CombatHandler extends CommonUI implements UsesUserInput {
         try {
             Ability chosenAbility = chooseAbility(player);
             ArrayList<Entity> chosenTargets = new ArrayList<>();
-            if (battleEnemies.size() == 1) {
-                chosenTargets.add(battleEnemies.get(0));
-            } else {
-                chosenTargets = getTargetsList(chosenAbility);
-            }
+            chosenTargets.add(battleEnemies.get(0));
             battle.addEffect(battle.uses(player,chosenAbility,chosenTargets,true));
         } catch (InsufficientResourceException | UserInputException e) {
             gs.setDisplayText(e.getMessage());
@@ -145,63 +108,6 @@ public class CombatHandler extends CommonUI implements UsesUserInput {
         return chosenAbility;
     }
 
-    private ArrayList<Entity> getTargetsList(Ability ability) {
-        System.out.println(displayEntityArrayList(battleEnemies));
-        ArrayList<Entity> targets = new ArrayList<>();
-        int targetCounter = ability.numTargets(); // -1 indicates self-use
-        if (targetCounter == -1) {
-            targets.add(player);
-            return targets;
-        }
-
-        for (int i = 1; i <= targetCounter; i++) {
-            targets.add(getTarget(i));
-        }
-        return targets;
-    }
-
-    private Entity getTarget(int targetNumber) {
-        Entity target = null;
-        try {
-            target = (getTargetFromString(getFullInput("| Select target number [" + targetNumber + "]")));
-        } catch (UserInputException e) {
-            getTarget(targetNumber);
-        }
-        return target;
-    }
-
-    private Entity getTargetFromString(String input) throws UserInputException {
-        for (Entity entity : battleEnemies) {
-            if (input.equalsIgnoreCase(entity.name())) {
-                return entity;
-            }
-        }
-        throw new UserInputException("Please enter an actual target.");
-    }
-
-    // EFFECTS: returns a formatted string of the current Hp and Mana of all entities in combat
-    public void inCombatSummary() {
-        StringBuilder combatSummary = new StringBuilder("| --------------------------- |");
-        combatSummary.append("\n| ").append(player.name())
-                .append("\n|      Health: ").append(player.stats().in(0,5))
-                .append("\n|        Mana: ").append(player.stats().in(0,6))
-                .append("\n|   CmbtActns: ").append(player.getCombatActions())
-                .append("\n| --------------------------- |");
-        for (Entity enemy : battleEnemies) {
-            combatSummary.append("\n| ").append(enemy.name())
-                    .append("\n|      Health: ").append(enemy.stats().in(0,5))
-                    .append("\n|        Mana: ").append(enemy.stats().in(0,6))
-                    .append("\n|   CmbtActns: ").append(enemy.getCombatActions())
-                    .append("\n| --------------------------- |");
-        }
-        System.out.println(combatSummary);
-    }
-
-    // EFFECTS: returns the turnNumber in the combat handler
-    public int getTurnNumber() {
-        return turnNumber;
-    }
-
     // EFFECTS: returns the enemies the player is in combat with
     public ArrayList<Entity> getEnemies() {
         return battleEnemies;
@@ -209,7 +115,6 @@ public class CombatHandler extends CommonUI implements UsesUserInput {
 
     // MODIFIES: gs
     // EFFECTS: sets the gs hasUnusedUserInput to false
-    @Override
     public void consumedUserInput() {
         gs.setHasUnusedUserInput(false);
     }

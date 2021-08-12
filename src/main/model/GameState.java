@@ -9,11 +9,12 @@ import model.items.BirchBow;
 import model.items.FluffyHat;
 import org.json.JSONObject;
 import persistence.JsonWriter;
+import persistence.Writable;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
-public class GameState {
+public class GameState implements Writable {
     private int adventureNumber;
     private Player player;
     private CombatHandler combat;
