@@ -21,3 +21,6 @@ Adventurers' Voyage is of great interest to myself as it presents a complex envi
 ### Task 2:
 - Robust class (Entity abstract class)
 - Bi-directional association (GameState and CombatHandler, AdvVoyGUI and TextInOutGUI and CharacterCreatorGUI)
+- ### Task 3:
+Although this project was a large challenge, it was also a very rewarding process. However, it forced me to learn many new concepts and implement them for first time, resulting in solutions that worked, but could have been much better. For example, in the GUI version of the game, the observer design pattern could have been used. Making the GameState extend Observable and many of the GUI classes implement Observer, the handleGameState and entire CombatHandler could be greatly simplified. In point form:
+- Refactor the GUI updating to use the Observer Design Pattern.
